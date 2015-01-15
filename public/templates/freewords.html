@@ -1,0 +1,13 @@
+<div class="row magazine-page">
+	<div class="col-md-9">
+		<div ng-repeat="search_way in data.remote.search_ways" ng-if="search_way.code == 'freeword'">
+			<div class="headline">
+				<h2>{{search_way[data.language]}}</h2>
+			</div>
+			<div ng-if="search_way.code == 'freeword'" ng-include="'/partials/freeword.html'">
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+	</div>
+</div>

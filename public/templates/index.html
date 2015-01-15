@@ -1,0 +1,54 @@
+<div class="row magazine-page">
+	<div class="col-md-9">
+		<div ng-repeat="key in notSorted(data.remote.search_ways)" ng-init="search_way = data.remote.search_ways[key]" ng-if="search_way.code != 'detail'">
+			<div class="headline" ng-if="search_way.code == 'photo' || search_way.code == 'freeword'">
+				<h2>{{search_way[data.language]}}</h2>
+			</div>
+			<div ng-if="search_way.code == 'photo'">
+				<div class="tab-v2" ng-init="tabindex = 0;subtabindex = 0">
+					<ul class="nav nav-tabs">
+						<li ng-repeat="photo_category in data.remote.photo_categories" ng-class="{active: $parent.tabindex == $index}"><a data-toggle="tab" href="" ng-click="$parent.tabindex = $index; $parent.subtabindex = 0;">{{photo_category[data.language]}}</a></li>
+					</ul>
+					<div class="tab-content">
+						<div ng-repeat="photo_category in data.remote.photo_categories" ng-class="{active: $parent.tabindex == $index}" class="tab-pane fade in" ng-init="subtabindex = 0">
+							<div>
+								<a class="btn btn-default btn-u-xs margin-right-5 margin-bottom-5" ng-repeat="photo_sub_category in data.remote.photo_sub_categories[photo_category.id]" ng-class="{'btn-u': $index == $parent.$parent.subtabindex}" ng-click="$parent.$parent.subtabindex = $index">{{photo_sub_category[data.language]}}</a>
+							</div>
+							<div ng-repeat="photo_sub_category in data.remote.photo_sub_categories[photo_category.id]" ng-show="$parent.$parent.subtabindex == $index">
+								<div class="row">
+									<div ng-if="data.remote.photos[photo_category.id][$parent.$parent.subtabindex].length > 0">
+										<div class="col-md-3 col-xs-6" ng-repeat-start="photo in data.remote.photos[photo_category.id][$parent.$parent.$parent.subtabindex]">
+											<div class="magazine-news-img margin-bottom-5">
+												<a href="#"><img alt="" src="/uploads/{{photo.path}}" class="img-responsive"></a>
+												<span class="magazine-badge label-dark">{{photo["title_" + data.language]}}</span>									  
+											</div>
+										</div>
+										<div class="clearfix visible-md visible-lg" ng-if="$index%4==3"></div>
+										<div class="clearfix visible-xs visible-sm" ng-if="$index%2==1"></div>
+										<div ng-repeat-end=""></div>
+									</div>
+									<div ng-if="data.remote.photos[photo_category.id][$parent.$parent.subtabindex].length == 0" class="col-lg-12">
+										<div class="tag-box tag-box-v4">
+											<p>{{data.remote.texts.not_found}}</p>
+										</div>
+									</div>
+								</div>
+							</div>	
+						</div>
+					</div>
+				</div>
+			</div>
+			<div ng-if="search_way.code == 'freeword'">
+				<div class="input-group">
+					<input type="text" class="form-control" ng-model="freeword">
+					<span class="input-group-btn">
+						<a class="btn btn-inverse" href="/freewords/{{freeword}}"><i class="fa fa-search"></i> {{data.remote.texts.search}}</a>
+					</span>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<div class="col-md-3">
+	</div>
+</div>

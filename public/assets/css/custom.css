@@ -1,0 +1,136 @@
+/* Add here all your css styles (customizations) */
+body {
+	font-family: Helvetica,Arial,meiryo,sans-serif;
+}
+
+.logo-boxes {
+	float: left;
+}
+
+.logo-boxes img {
+	vertical-align: bottom;
+}
+
+.logo-autham,
+.logo-area,
+.logo-site-genre {
+	height: 16px;
+	margin-top: 12px;
+}
+
+.loader {
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0.95);
+	color: white;
+	height: 100%;
+	position: absolute;
+	text-align: center;
+	vertical-align: middle;
+	width: 100%;
+	z-index: 9999;
+	top: 0;
+}
+
+.loader-box {
+	height: 56px;
+	left: 50%;
+	margin: -28px 0 0 -45px;
+	position: absolute;
+	top: 50%;
+	width: 90px;
+}
+
+.loader i{
+	font-size: 300%;
+}
+ 
+.loader p{
+	color: #FFF;
+}
+
+.footer-logo {
+	display: block;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: "Open Sans",meiryo,sans-serif;
+}
+
+.topbar h1 {
+	font-size: 10px;
+	margin: 0;
+	line-height: 20px;
+}
+
+.header .navbar-default .navbar-nav > li > a {
+	font-size: 12px;
+	padding: 9px 20px 9px 10px;
+}
+
+.header .dropdown > a:after {
+	right: 7px;
+}
+
+.content {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+.headline h2 {
+	font-size: 18px;
+}
+
+.magazine-page span.magazine-badge {
+	font-size: 12px;
+}
+
+.footer-v1 .footer h2 {
+	font-size: 16px;
+}
+
+#accordion-1 .panel-title,
+#accordion-2 .panel-title {
+	cursor: pointer;
+}
+
+.input-group .form-control {
+	height: auto;
+}
+
+.btn-selected-search {
+	bottom: 0;
+	left: 0;
+	opacity: 0.8;
+	position: fixed;
+	width: 100%;
+	z-index: 9000;
+}
+
+.btn-inverse {
+	background-color: #333;
+	border-color: #333;
+	color: #FFF;
+}
+.btn-inverse:hover,
+.btn-inverse:focus,
+.btn-inverse:active,
+.btn-inverse.active {
+	background-color: #262626;
+	border-color: #1a1a1a;
+	color: #FFF;
+}
+.btn-inverse.disabled:hover,
+.btn-inverse.disabled:focus,
+.btn-inverse.disabled:active,
+.btn-inverse.disabled.active,
+.btn-inverse[disabled]:hover,
+.btn-inverse[disabled]:focus,
+.btn-inverse[disabled]:active,
+.btn-inverse[disabled].active,
+fieldset[disabled] .btn-inverse:hover,
+fieldset[disabled] .btn-inverse:focus,
+fieldset[disabled] .btn-inverse:active,
+fieldset[disabled] .btn-inverse.active {
+	background-color: #333;
+	border-color: #333;
+}
+
