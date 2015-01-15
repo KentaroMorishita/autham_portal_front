@@ -38,7 +38,7 @@
 																	<span class="input-group-addon">
 																		<input type="checkbox" ng-model="thisState" ng-change="thisState = createStationUrl(station.code, thisState);">
 																	</span>
-																	<a class="form-control" href="/stations/{{station.code}}">{{station[data.language]}}</a>
+																	<a class="form-control" href="stations/{{station.code}}">{{station[data.language]}}</a>
 																</div>
 															</div>
 															<div class="clearfix visible-md visible-lg" ng-if="$index%4==3"></div>
@@ -58,7 +58,7 @@
 					</div>
 
 				</div>	
-				<a ng-show="$parent.$parent.station_url" class="btn-u btn-u-lg btn-block btn-selected-search" href="/stations/{{$parent.$parent.station_url}}"><i class="fa fa-search"></i> {{data.remote.texts.selected_station_search}}</a>
+				<a ng-show="$parent.$parent.station_url" class="btn-u btn-u-lg btn-block btn-selected-search" href="stations/{{$parent.$parent.station_url}}"><i class="fa fa-search"></i> {{data.remote.texts.selected_station_search}}</a>
 			</div>
 		</div>
 	</div>

@@ -19,7 +19,7 @@
 									<div ng-if="data.remote.photos[photo_category.id][$parent.$parent.subtabindex].length > 0">
 										<div class="col-md-3 col-xs-6" ng-repeat-start="photo in data.remote.photos[photo_category.id][$parent.$parent.$parent.subtabindex]">
 											<div class="magazine-news-img margin-bottom-5">
-												<a href="#"><img alt="" src="/uploads/{{photo.path}}" class="img-responsive"></a>
+												<a href="#"><img alt="" src="uploads/{{photo.path}}" class="img-responsive"></a>
 												<span class="magazine-badge label-dark">{{photo["title_" + data.language]}}</span>									  
 											</div>
 										</div>
@@ -42,7 +42,7 @@
 				<div class="input-group">
 					<input type="text" class="form-control" ng-model="freeword">
 					<span class="input-group-btn">
-						<a class="btn btn-inverse" href="/freewords/{{freeword}}"><i class="fa fa-search"></i> {{data.remote.texts.search}}</a>
+						<a class="btn btn-inverse" href="freewords/{{freeword}}"><i class="fa fa-search"></i> {{data.remote.texts.search}}</a>
 					</span>
 				</div>
 			</div>

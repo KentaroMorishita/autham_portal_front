@@ -56,9 +56,13 @@ Autham.run(function($rootScope, $routeParams, $location, $http, $interpolate){
 			$rootScope.data.img_ratio = '_2x';
 		}
 		$rootScope.data.domain = document.domain;
-		$rootScope.data.language = document.domain.split('.')[0];
-		$rootScope.data.area = document.domain.split('.')[1];
-		$rootScope.data.siteGenre = document.domain.split('.')[2];
+		if($rootScope.data.domain == ''){
+			$rootScope.document_root = '/www/';
+			$rootScope.data.domain = 'ja.osaka.ramen.autham.net';
+		}
+		$rootScope.data.language = $rootScope.data.domain.split('.')[0];
+		$rootScope.data.area = $rootScope.data.domain.split('.')[1];
+		$rootScope.data.siteGenre = $rootScope.data.domain.split('.')[2];
 		$rootScope.data.requestUrl = pathname;
 		if($rootScope.data.requestUrl.substr(-1) != '/'){
 			$rootScope.data.requestUrl = $rootScope.data.requestUrl + '/';
