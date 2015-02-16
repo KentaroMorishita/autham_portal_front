@@ -134,3 +134,47 @@ fieldset[disabled] .btn-inverse.active {
 	border-color: #333;
 }
 
+.margin-top-10 {
+	margin-top: 10px;
+}
+
+.margin-top-15 {
+	margin-top: 15px;
+}
+
+.text-light {
+	color: #BBB;
+}
+
+.text-yellow {
+	color: #f1c40f;
+}
+
+.pagination > li > a {
+	padding-left: 12px;
+	padding-right: 12px;
+	font-size: 11px;
+}
+.pagination > li.dot > a {
+	border-bottom: medium none;
+	border-top: medium none;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+.pagination {
+	margin: 0 0 10px;
+}
+
+.dropdown-menu {
+	min-width: inherit;
+}
+
+#accordion-1.sky-form .checkbox i {
+	top: 0px;
+}
+
+#accordion-1.sky-form .checkbox {
+	min-height: 17px;
+	padding-left: 17px;
+}

@@ -45,10 +45,7 @@ Autham.config(['$httpProvider', function($httpProvider){
 	$httpProvider.defaults.withCredentials = true;
 }]);
 Autham.run(function($rootScope, $routeParams, $location, $http, $interpolate){
-	$rootScope.$watch(function(){
-		return $location.path();
-	},
-	function(pathname){
+	$rootScope.$on('$routeChangeSuccess', function(){
 		$rootScope.loader = true;
 		$rootScope.data = {};
 		$rootScope.data.img_ratio = '';
@@ -63,11 +60,19 @@ Autham.run(function($rootScope, $routeParams, $location, $http, $interpolate){
 		$rootScope.data.language = $rootScope.data.domain.split('.')[0];
 		$rootScope.data.area = $rootScope.data.domain.split('.')[1];
 		$rootScope.data.siteGenre = $rootScope.data.domain.split('.')[2];
-		$rootScope.data.requestUrl = pathname;
+		$rootScope.data.requestUrl = $location.$$path;
+		var requestUrl = $rootScope.data.requestUrl;
 		if($rootScope.data.requestUrl.substr(-1) != '/'){
-			$rootScope.data.requestUrl = $rootScope.data.requestUrl + '/';
+			var requestUrl = $rootScope.data.requestUrl + '/';
 		}
-		var requestTo = 'http://api.' + $rootScope.data.siteGenre + '.autham.net' + $rootScope.data.requestUrl + $rootScope.data.language + '/' + $rootScope.data.area;
+		$rootScope.query = window.location.search.substring(1);
+		if($rootScope.query != ''){
+			$rootScope.queryString = '?' + $rootScope.query;
+		}else{
+			$rootScope.queryString = '';
+		}
+		console.log($rootScope.queryString);
+		var requestTo = 'http://api.' + $rootScope.data.siteGenre + '.autham.net' + requestUrl + $rootScope.data.language + '/' + $rootScope.data.area + $rootScope.queryString;
 		$http.jsonp(requestTo, {params: {callback: 'JSON_CALLBACK'}})
 		.success(function(data, status, headers, config){
 			$rootScope.data.remote = data;
@@ -96,12 +101,39 @@ Autham.run(function($rootScope, $routeParams, $location, $http, $interpolate){
 				$rootScope[target][index] = 'in';
 			}
 		}
+		// show first accordion
+		$rootScope.showFirstAccordion = function(target){
+			$rootScope[target] = {};
+			$rootScope[target][0] = 'in';
+		}
+		// show all accordion
+		$rootScope.showAllAccordion = function(listData, target){
+			$rootScope[target] = {};
+			for(i in listData){
+				$rootScope[target][i] = 'in';
+			}
+		}
 		// prevent automatic sort
 		$rootScope.notSorted = function(obj){
 			if (!obj) {
 				return [];
 			}
 			return Object.keys(obj);
+		}
+		// get review average
+		$rootScope.getReviewAverage = function(obj){
+			var sums = 0;
+			for(i in obj){
+				sums = sums + parseInt(obj[i].rate);
+			}
+			var average = {};
+			average.raw = sums / obj.length;
+			average.floor = Math.floor(average.raw);
+			return average;
+		}
+		// convert string to json
+		$rootScope.stringToJson = function(jsonString){
+			return $.parseJSON(jsonString);
 		}
 	});
 });

@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
-<!--[if !IE]><!--> <html lang="en" ng-app="Autham"> <!--<![endif]-->
+<!--[if !IE]><!--> <html lang="{{data.language}}" ng-app="Autham"> <!--<![endif]-->
 <head>
 <title>{{data.remote.title}}</title>
-
-	<base href="/">
 
 	<!-- Meta -->
 	<meta charset="utf-8">
@@ -16,23 +14,30 @@
 	<meta content="© Autham Japan" name="copyright">
 	<meta content="{{data.remote.keywords}}" name="classification">
 
+	<!-- For Google -->
+	<link rel="alternate" hreflang="{{language.code}}" href="http://{{language.code}}.{{data.area}}.{{data.siteGenre}}.autham.net{{data.requestUrl}}{{queryString}}" ng-repeat="language in data.remote.languages" ng-if="language.code != data.language">
+	<link rel="prev" href="http://{{data.language}}.{{data.area}}.{{data.siteGenre}}.autham.net{{data.requestUrl}}?display_way={{data.remote.display_way}}&page={{data.remote.result_lists.current_page - 1}}" ng-if="data.remote.result_lists && data.remote.result_lists.current_page != 1">
+	<link rel="next" href="http://{{data.language}}.{{data.area}}.{{data.siteGenre}}.autham.net{{data.requestUrl}}?display_way={{data.remote.display_way}}&page={{data.remote.result_lists.current_page + 1}}" ng-if="data.remote.result_lists && data.remote.result_lists.current_page != data.remote.result_lists.last_page">
+
 	<!-- Favicon -->
-	<link rel="shortcut icon" href="favicon.ico">
+	<link rel="shortcut icon" href="/favicon.ico">
 	
 	<!-- CSS Global Compulsory -->
-	<link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" href="assets/css/style.css">
+	<link rel="stylesheet" href="/assets/plugins/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/assets/css/style.css">
 
 	<!-- CSS Implementing Plugins -->
-	<link rel="stylesheet" href="assets/plugins/line-icons/line-icons.css">
-	<link rel="stylesheet" href="assets/plugins/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" href="/assets/plugins/line-icons/line-icons.css">
+	<link rel="stylesheet" href="/assets/plugins/font-awesome/css/font-awesome.css">
 	
 	<!-- CSS Theme -->
-	<link rel="stylesheet" href="assets/css/theme-colors/{{data.remote.settings.theme_color}}.css">
+	<link rel="stylesheet" href="/assets/css/theme-colors/{{data.remote.settings.theme_color}}.css">
 	
 	<!-- Custom CSS -->
-	<link rel="stylesheet" href="assets/css/pages/blog_magazine.css">
-	<link rel="stylesheet" href="assets/css/custom.css">
+	<link rel="stylesheet" href="/assets/css/pages/blog_magazine.css">
+	<link rel="stylesheet" href="/assets/plugins/sky-forms/version-2.0.1/css/sky-forms.css">
+	<link rel="stylesheet" href="/assets/plugins/sky-forms/version-2.0.1/css/custom-sky-forms.css">
+	<link rel="stylesheet" href="/assets/css/custom.css">
 </head>
 <body>
 
@@ -48,7 +53,7 @@
 					<i class="fa fa-globe"></i>
 					<a>Languages</a>
 					<ul class="languages">
-						<li ng-repeat="language in data.remote.languages" ng-class="{active: data.language == language.code}"><a href="http://{{language.code}}.{{data.area}}.{{data.siteGenre}}.autham.net">{{language.name}} <i class="fa fa-check" ng-show="data.language == language.code"></i></a></li>
+						<li ng-repeat="language in data.remote.languages" ng-class="{active: data.language == language.code}"><a href="http://{{language.code}}.{{data.area}}.{{data.siteGenre}}.autham.net{{data.requestUrl}}">{{language.name}} <i class="fa fa-check" ng-show="data.language == language.code"></i></a></li>
 					</ul>
 				</li>
 			</ul>
@@ -66,15 +71,15 @@
 					<span class="sr-only">Toggle navigation</span>
 					<span class="fa fa-bars"></span>
 				</button>
-				<a href="" class="navbar-brand clearfix">
+				<a href="/" class="navbar-brand clearfix">
 					<div class="logo-boxes">
-						<img alt="{{data.area}}" src="assets/img/characters/areas/{{data.area}}_{{data.language}}{{data.img_ratio}}.png" class="pull-left logo-area">
+						<img alt="{{data.area}}" src="/assets/img/characters/areas/{{data.area}}_{{data.language}}{{data.img_ratio}}.png" class="pull-left logo-area">
 					</div>
 					<div class="logo-boxes">
-						<img alt="{{data.siteGenre}}" src="assets/img/characters/genres/{{data.siteGenre}}_{{data.language}}{{data.img_ratio}}.png" class="pull-left logo-site-genre">
+						<img alt="{{data.siteGenre}}" src="/assets/img/characters/genres/{{data.siteGenre}}_{{data.language}}{{data.img_ratio}}.png" class="pull-left logo-site-genre">
 					</div>
 					<div class="logo-boxes">
-						<img alt="Autham" src="assets/img/logo{{data.img_ratio}}.png" class="pull-left logo-autham">
+						<img alt="Autham" src="/assets/img/logo{{data.img_ratio}}.png" class="pull-left logo-autham">
 					</div>
 				</a>
 			</div>
@@ -82,11 +87,11 @@
 			<div class="collapse navbar-collapse navbar-responsive-collapse">
 				<ul class="nav navbar-nav">
 					<li ng-repeat="key in notSorted(data.remote.search_ways)" ng-init="search_way = data.remote.search_ways[key]">
-						<a class="" ng-href="{{search_way.code}}s" ng-if="search_way.code != 'photo'">
+						<a class="" ng-href="/{{search_way.code}}s" ng-if="search_way.code != 'photo'">
 							<i class="fa {{search_way.icon_class}}"></i>
 							{{search_way[data.language]}}
 						</a>
-						<a class="" ng-href="" ng-if="search_way.code == 'photo'">
+						<a class="" ng-href="/" ng-if="search_way.code == 'photo'">
 							<i class="fa {{search_way.icon_class}}"></i>
 							{{search_way[data.language]}}
 						</a>
@@ -104,10 +109,14 @@
 <div class="breadcrumbs" ng-if="data.requestUrl != '/'">
 	<div class="container">
 		<ul class="pull-left breadcrumb">
-			<li><a href="">{{data.remote.texts.home}}</a></li>
+			<li><a href="/">{{data.remote.texts.home}}</a></li>
+			<li ng-if="data.remote.controller == 'station' && data.remote.action == 'result'"><a href="/stations">{{data.remote.search_ways.station[data.language]}}</a></li>
+			<li ng-if="data.remote.controller == 'area' && data.remote.action == 'result'"><a href="/areas">{{data.remote.search_ways.area[data.language]}}</a></li>
 			<li class="active" ng-if="data.requestUrl == '/stations/'">{{data.remote.search_ways.station[data.language]}}</li>
 			<li class="active" ng-if="data.requestUrl == '/areas/'">{{data.remote.search_ways.area[data.language]}}</li>
 			<li class="active" ng-if="data.requestUrl == '/freewords/'">{{data.remote.search_ways.freeword[data.language]}}</li>
+			<li class="active" ng-if="data.remote.controller == 'station' && data.remote.action == 'result'">{{data.remote.page_title}}</li>
+			<li class="active" ng-if="data.remote.controller == 'area' && data.remote.action == 'result'">{{data.remote.page_title}}</li>
 		</ul>
 	</div><!--/container-->
 </div>
@@ -127,15 +136,15 @@
 			<div class="row">
 				<!-- About -->
 				<div class="col-md-4 md-margin-bottom-40">
-					<a href="" class="footer-logo margin-bottom-10 clearfix">
+					<a href="/" class="footer-logo margin-bottom-10 clearfix">
 						<div class="logo-boxes">
-							<img alt="{{data.area}}" src="assets/img/characters/areas/{{data.area}}_{{data.language}}{{data.img_ratio}}.png" class="pull-left logo-area">
+							<img alt="{{data.area}}" src="/assets/img/characters/areas/{{data.area}}_{{data.language}}{{data.img_ratio}}.png" class="pull-left logo-area">
 						</div>
 						<div class="logo-boxes">
-							<img alt="{{data.siteGenre}}" src="assets/img/characters/genres/{{data.siteGenre}}_{{data.language}}{{data.img_ratio}}.png" class="pull-left logo-site-genre">
+							<img alt="{{data.siteGenre}}" src="/assets/img/characters/genres/{{data.siteGenre}}_{{data.language}}{{data.img_ratio}}.png" class="pull-left logo-site-genre">
 						</div>
 						<div class="logo-boxes">
-							<img alt="Autham" src="assets/img/logo-inverse{{data.img_ratio}}.png" class="pull-left logo-autham">
+							<img alt="Autham" src="/assets/img/logo-inverse{{data.img_ratio}}.png" class="pull-left logo-autham">
 						</div>
 					</a>
 					<p>{{data.remote.texts.description}}</p>	  
@@ -148,10 +157,10 @@
 						<div class="headline"><h2>{{data.remote.texts.search}}</h2></div>
 						<ul class="list-unstyled link-list">
 							<li ng-repeat="key in notSorted(data.remote.search_ways)" ng-init="search_way = data.remote.search_ways[key]">
-								<a href="{{search_way.code}}s" ng-if="search_way.code != 'photo'">
+								<a href="/{{search_way.code}}s" ng-if="search_way.code != 'photo'">
 									{{search_way[data.language]}}
 								</a>
-								<a href="" ng-if="search_way.code == 'photo'">
+								<a href="/" ng-if="search_way.code == 'photo'">
 									{{search_way[data.language]}}
 								</a>
 								<i class="fa fa-angle-right"></i></li>
@@ -211,18 +220,18 @@
 <!--=== End Loader	===-->
 
 <!-- JS Global Compulsory -->
-<script src="assets/plugins/jquery/jquery.min.js"></script>
-<script src="assets/plugins/jquery/jquery-migrate.min.js"></script>
-<script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="/assets/plugins/jquery/jquery.min.js"></script>
+<script src="/assets/plugins/jquery/jquery-migrate.min.js"></script>
+<script src="/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
 
 <!-- JS Implementing Plugins -->
-<script src="assets/plugins/back-to-top.js"></script>
+<script src="/assets/plugins/back-to-top.js"></script>
 
 <!-- JS Customization -->
-<script type="text/javascript" src="assets/js/custom.js"></script>
+<script type="text/javascript" src="/assets/js/custom.js"></script>
 
 <!-- JS Page Level -->
-<script src="assets/js/app.js"></script>
+<script src="/assets/js/app.js"></script>
 <script>
 jQuery(document).ready(function() {
 	App.init();
@@ -230,15 +239,15 @@ jQuery(document).ready(function() {
 </script>
 
 <!--[if lt IE 9]>
-	<script src="assets/plugins/respond.js"></script>
-	<script src="assets/plugins/html5shiv.js"></script>
-	<script src="assets/js/plugins/placeholder-IE-fixes.js"></script>
+	<script src="/assets/plugins/respond.js"></script>
+	<script src="/assets/plugins/html5shiv.js"></script>
+	<script src="/assets/js/plugins/placeholder-IE-fixes.js"></script>
 <![endif]-->
 
 <!-- Angular JS -->
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-route.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-resource.js"></script>
-<script src="scripts/app.js"></script>
+<script src="/scripts/app.js"></script>
 </body>
 </html>

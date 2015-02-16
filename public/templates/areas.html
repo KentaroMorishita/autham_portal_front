@@ -1,12 +1,12 @@
 <div class="row magazine-page">
-	<div class="col-md-9">
+	<div class="col-md-9" ng-init="showFirstAccordion('acoclass');">
 		<div ng-repeat="search_way in data.remote.search_ways" ng-if="search_way.code == 'area'">
 			<div class="headline">
 				<h2>{{search_way[data.language]}}</h2>
 			</div>
 			<div ng-if="search_way.code == 'area'">
 
-				<div id="accordion-1" class="panel-group margin-bottom-5" ng-init="$parent.$parent.acoclass[0] = 'in'">
+				<div id="accordion-1" class="panel-group margin-bottom-5 sky-form">
 					<div class="panel panel-default" ng-repeat="areaGroup in data.remote.area_groups">
 						<div class="panel-heading">
 							<h4 class="panel-title" ng-click="accordToggle('acoclass', $index);">
@@ -22,9 +22,12 @@
 									<div ng-repeat-start="area in data.remote.areas[areaGroup.id]" class="col-md-3">
 										<div class="input-group margin-bottom-5">
 											<span class="input-group-addon">
-												<input type="checkbox" ng-model="thisState" ng-change="thisState = createAreaUrl(area.code, thisState);">
+												<label class="checkbox">
+													<input type="checkbox" ng-model="thisState" ng-change="thisState = createAreaUrl(area.code, thisState);">
+													<i></i>
+												</label>
 											</span>
-											<a class="form-control" href="areas/{{area.code}}">{{area[data.language]}}</a>
+											<a class="form-control" href="/areas/{{area.code}}">{{area[data.language]}}</a>
 										</div>
 									</div>
 									<div class="clearfix visible-md visible-lg" ng-if="$index%4==3"></div>
@@ -36,7 +39,7 @@
 						</div>
 					</div>
 				</div>
-				<a ng-show="$parent.area_url" class="btn-u btn-u-lg btn-block btn-selected-search" href="areas/{{$parent.area_url}}"><i class="fa fa-search"></i> {{data.remote.texts.selected_area_search}}</a>
+				<a ng-show="$parent.area_url" class="btn-u btn-u-lg btn-block btn-selected-search" href="/areas/{{$parent.area_url}}"><i class="fa fa-search"></i> {{data.remote.texts.selected_area_search}}</a>
 
 			</div>
 		</div>

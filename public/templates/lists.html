@@ -1,9 +1,136 @@
 <div class="row magazine-page">
-	<div class="col-md-9">
-		<span ng-repeat="station in data.remote.stations">{{station[data.language]}} </span>
-		<span ng-repeat="area in data.remote.areas">{{area[data.language]}} </span>
-		<span ng-repeat="freeword in data.remote.freewords">{{freeword}} </span>
-	</div>
-	<div class="col-md-3">
+	<div class="col-md-12">
+		<div class="headline">
+			<h2>{{data.remote.page_title}}</h2>
+		</div>
+		<div>
+			<div class="tab-v2" ng-init="tabindex = 0;">
+				<ul class="nav nav-tabs">
+					<li ng-repeat="list_display_way in data.remote.settings.list_display_ways" ng-class="{active: data.remote.display_way == list_display_way}"><a ng-href="{{data.requestUrl}}?display_way={{list_display_way}}">{{data.remote.categories[list_display_way][data.language]}}</a></li>
+				</ul>
+				<div class="tab-content" ng-repeat="list_display_way in data.remote.settings.list_display_ways" ng-show="data.remote.display_way == list_display_way">
+					<div class="row">
+						<div class="col-md-9">
+							<div class="clearfix" ng-if="data.remote.result_lists.total > 1">
+								<div class="margin-bottom-10">
+									<p>
+										{{data.remote.texts.pagination_title}}
+									</p>
+								</div>
+								<div class="clearfix margin-bottom-10">
+									<div class="pull-right">
+										<div class="btn-group">
+											<button data-toggle="dropdown" class="btn-u btn-u-dark btn-u-sm dropdown-toggle" type="button">
+												<i class="fa fa-sort-alpha-asc"></i>
+												{{data.remote.order[data.language]}}
+											</button>
+											<ul role="menu" class="dropdown-menu">
+												<li ng-repeat="order in data.remote.categories[list_display_way].settings.order_lists.lists" ng-class="{'active': data.remote.order.code == order}">
+													<a href="{{data.requestUrl}}?display_way={{data.remote.display_way}}&page=1&per-page={{data.remote.per_list}}&order={{order}}">{{data.remote.orders[order][data.language]}}</a>
+												</li>
+											</ul>
+										</div>
+										<div class="btn-group">
+											<button data-toggle="dropdown" class="btn-u btn-u-dark btn-u-sm dropdown-toggle" type="button">
+												<i class="fa fa-th"></i>
+												{{data.remote.per_page}}
+											</button>
+											<ul role="menu" class="dropdown-menu">
+												<li ng-repeat="per_list in data.remote.settings.max_display_list.list" ng-class="{'active': data.remote.per_page == per_list}">
+													<a href="{{data.requestUrl}}?display_way={{data.remote.display_way}}&page=1&per-page={{per_list}}&order={{data.remote.order.code}}">{{per_list}}</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+							<ul class="pagination" ng-if="data.remote.result_lists.last_page > 1">
+								<li ng-repeat="i in data.remote.result_lists.range track by $index" ng-class="{'active': data.remote.result_lists.current_page == i, 'dot': i == '...'}"><a ng-href="{{data.requestUrl}}?display_way={{list_display_way}}&page={{i}}&per-page={{data.remote.per_page}}&order={{data.remote.order.code}}">{{i}}</a></li>
+							</ul>
+							<div ng-repeat="result in data.remote.result_lists.data">
+								<div class="row">
+									<div class="funny-boxes-img col-md-4" ng-init="photos = result.photos.split(',')">
+										<div id="carousel-{{$parent.list_display_way}}-{{$index}}" class="carousel slide carousel-v1" ng-if="photos.length > 1 && result.validity_flag == 1">
+											<div class="carousel-inner">
+												<div class="item" ng-repeat="photo in photos" ng-class="{'active': $first}">
+													<img class="img-responsive" src="/uploads/{{photo}}">
+												</div>
+											</div>
+											<div class="carousel-arrow">
+												<a class="left carousel-control" href="" data-target="#carousel-{{$parent.list_display_way}}-{{$index}}" data-slide="prev">
+													<i class="fa fa-angle-left"></i>
+												</a>
+												<a class="right carousel-control" href="" data-target="#carousel-{{$parent.list_display_way}}-{{$index}}" data-slide="next">
+													<i class="fa fa-angle-right"></i>
+												</a>
+											</div>
+										</div>
+										<div ng-if="photos.length == 1 && result.validity_flag == 1">
+											<img class="img-responsive" src="/uploads/{{result.photos}}">
+										</div>
+										<div ng-if="result.photos == NULL || result.validity_flag == 0">
+											<img class="img-responsive" src="http://time.levtech.jp/wp-content/themes/lev_tech-time9/img/NoImage.jpg">
+										</div>
+									</div>
+									<div class="col-md-8">
+										<h3>{{result.title}}</h3>
+										<p>
+											<span class="label label-{{result.color}}">{{result.sub_category}}</span>
+										</p>
+										<div class="small" ng-repeat="review_item in data.remote.categories[$parent.list_display_way].settings.review_items" ng-if="result.reviews[review_item].length > 0 && result.validity_flag == 1">
+											{{data.remote.review_items[$parent.$parent.list_display_way][review_item][data.language]}}:
+											<span ng-init="thisAverage = getReviewAverage(result.reviews[review_item]);">{{thisAverage.raw}}</span>
+											<i class="fa fa-star text-light" ng-repeat="i in [1,2,3,4,5]" ng-class="{'text-yellow': i <= thisAverage.raw}"></i>
+										</div>
+										<p>{{result.content}}</p>
+										<table class="table table-condensed table-striped" ng-if="data.remote.categories[$parent.list_display_way].settings.list_display_informations">
+											<tr ng-repeat="information in data.remote.categories[$parent.list_display_way].settings.list_display_informations">
+												<th ng-if="
+													information != 'station' && information != 'area' &&
+													(
+														data.remote.item_informations[$parent.$parent.list_display_way][information].settings.free_plan_limit == 0 ||
+														result.validity_flag == 1
+													)
+													">{{data.remote.item_informations[$parent.$parent.list_display_way][information][data.language]}}</th>
+												<th ng-if="information == 'station'">{{data.remote.texts.station}}</th>
+												<th ng-if="information == 'area'">{{data.remote.texts.area}}</th>
+												<td ng-if="
+													information != 'station' && information != 'area' &&
+													(
+														data.remote.item_informations[$parent.$parent.list_display_way][information].settings.free_plan_limit == 0 ||
+														result.validity_flag == 1
+													)
+													">
+													{{result.informations[information]}}
+													<span ng-if="data.remote.item_informations[$parent.$parent.list_display_way][information].settings.type == 'currency'">
+														{{data.remote.currency[data.language]}}
+													</span>
+												</td>
+												<td ng-if="information == 'station'">{{result.station}}{{data.remote.texts.glue}}{{data.remote.texts.station}}</td>
+												<td ng-if="information == 'area'">{{result.area}}</td>
+											</tr>
+										</table>
+									</div>
+								</div>
+								<hr class="devider devider-dashed margin-bottom-15 margin-top-15" ng-hide="$last">
+							</div>
+							<div class="tag-box tag-box-v4" ng-if="data.remote.result_lists.total == 0">
+								<p>{{data.remote.texts.not_found}}</p>
+							</div>
+							<pre>{{data.remote.result_lists|json}}</pre>
+							<ul class="pagination" ng-if="data.remote.result_lists.last_page > 1">
+								<li ng-repeat="i in data.remote.result_lists.range track by $index" ng-class="{'active': data.remote.result_lists.current_page == i, 'dot': i == '...'}"><a ng-href="{{data.requestUrl}}?display_way={{list_display_way}}&page={{i}}&per-page={{data.remote.per_page}}&order={{data.remote.order.code}}">{{i}}</a></li>
+							</ul>
+						</div>
+						<div class="col-md-3">
+						</div>
+					</div>
+				</div>
+			</div> 
+		</div>
+		<!--
+		<pre>{{data.remote.result_lists|json}}</pre><br>
+		<pre>{{data.remote.settings|json}}</pre><br>
+		-->
 	</div>
 </div>
