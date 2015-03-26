@@ -1,40 +1,4 @@
-var Autham = angular.module('Autham',['ngRoute','customFilters']);
-Autham.config(['$routeProvider', function($routeProvider){
-	$routeProvider
-		.when('/', {
-			templateUrl: '/templates/index.html',
-			controller: 'IndexCtrl'
-		})
-		.when('/stations', {
-			templateUrl: '/templates/stations.html',
-			controller: 'StationsCtrl'
-		})
-		.when('/stations/:stations', {
-			templateUrl: '/templates/lists.html',
-			controller: 'ListsCtrl'
-		})
-		.when('/areas', {
-			templateUrl: '/templates/areas.html',
-			controller: 'AreasCtrl'
-		})
-		.when('/areas/:areas', {
-			templateUrl: '/templates/lists.html',
-			controller: 'ListsCtrl'
-		})
-		.when('/freewords', {
-			templateUrl: '/templates/freewords.html',
-			controller: 'FreewordsCtrl'
-		})
-		.when('/freewords/:freewords', {
-			templateUrl: '/templates/lists.html',
-			controller: 'ListsCtrl'
-		})
-		/*
-		.otherwise({
-			redirectTo: '/'
-		})
-		*/
-}]);
+var Autham = angular.module('Autham',['ngRoute','customFilters','services']);
 Autham.config(['$locationProvider', function($locationProvider){
 	$locationProvider.html5Mode({
 		enabled: true,
@@ -44,127 +8,96 @@ Autham.config(['$locationProvider', function($locationProvider){
 Autham.config(['$httpProvider', function($httpProvider){
 	$httpProvider.defaults.withCredentials = true;
 }]);
-Autham.run(function($rootScope, $routeParams, $location, $http, $interpolate){
-	$rootScope.$on('$routeChangeSuccess', function(){
-		$rootScope.loader = true;
-		$rootScope.data = {};
-		$rootScope.data.img_ratio = '';
-		if(window.devicePixelRatio > 1){
-			$rootScope.data.img_ratio = '_2x';
-		}
-		$rootScope.data.domain = document.domain;
-		if($rootScope.data.domain == ''){
-			$rootScope.document_root = '/www/';
-			$rootScope.data.domain = 'ja.osaka.ramen.autham.net';
-		}
-		$rootScope.data.language = $rootScope.data.domain.split('.')[0];
-		$rootScope.data.area = $rootScope.data.domain.split('.')[1];
-		$rootScope.data.siteGenre = $rootScope.data.domain.split('.')[2];
-		$rootScope.data.requestUrl = $location.$$path;
-		var requestUrl = $rootScope.data.requestUrl;
-		if($rootScope.data.requestUrl.substr(-1) != '/'){
-			var requestUrl = $rootScope.data.requestUrl + '/';
-		}
-		$rootScope.query = window.location.search.substring(1);
-		if($rootScope.query != ''){
-			$rootScope.queryString = '?' + $rootScope.query;
-		}else{
-			$rootScope.queryString = '';
-		}
-		console.log($rootScope.queryString);
-		var requestTo = 'http://api.' + $rootScope.data.siteGenre + '.autham.net' + requestUrl + $rootScope.data.language + '/' + $rootScope.data.area + $rootScope.queryString;
-		$http.jsonp(requestTo, {params: {callback: 'JSON_CALLBACK'}})
-		.success(function(data, status, headers, config){
-			$rootScope.data.remote = data;
-			$rootScope.data.remote = $.parseJSON($interpolate(JSON.stringify(data))($rootScope));
-			$rootScope.loader = false;
-		})
-		.error(function(data, status, headers, config){
-			$rootScope.loader = false;
-		});
-		// switch sub tab
-		$rootScope.switchSubTab = function(obj){
-			$rootScope.subtabindex = obj.$index;
-		}
-		// open and close accord
-		$rootScope.accordToggle = function(target, index){
-			if(typeof $rootScope[target] == 'undefined'){
-				$rootScope[target] = {};
-			}
-			if(typeof $rootScope[target][index] != 'undefined'){
-				if($rootScope[target][index] == 'in'){
-					$rootScope[target][index] = '';
-				}else{
-					$rootScope[target][index] = 'in';
+
+Autham.directive('searchConditionDirective', ['$rootScope', function($rootScope){
+	return function(scope, element, attrs){
+		if(scope.$last){
+			$('.form_sliders').each(function(){
+				var thisCode = $(this).attr('code');
+				var thisMin = parseInt($(this).attr('range-min'));
+				var thisMax = parseInt($(this).attr('range-max'));
+				var thisPer	= parseInt($(this).attr('range-per'));
+				var thisValue = new Array();
+				thisValue[0] = thisMin;
+				thisValue[1] = thisMax;
+				if(typeof $rootScope.data.remote.searchs != 'undefined'){
+					if(typeof $rootScope.data.remote.searchs.details[thisCode] != 'undefined'){
+						thisValue[0] = $rootScope.data.remote.searchs.details[thisCode].min;
+						thisValue[1] = $rootScope.data.remote.searchs.details[thisCode].max;
+					}
 				}
-			}else{
-				$rootScope[target][index] = 'in';
+				$(this).slider({
+					min: thisMin,
+					max: thisMax,
+					step: thisPer,
+					range: true,
+					values: [thisValue[0], thisValue[1]],
+					slide: function(event, ui){
+						scope.data.search.details[thisCode].min = ui.values[0];
+						scope.data.search.details[thisCode].max = ui.values[1];
+						scope.$apply();
+					}
+				});
+			});
+		}
+	}
+}]);
+
+Autham.controller('FrontBaseCtrl', ['$scope', '$http', '$rootScope', '$routeParams', '$location', '$interpolate', 'commonService', function($scope, $http, $rootScope, $routeParams, $location, $interpolate, commonService){
+	$rootScope.commonService = commonService;
+	$rootScope.loader = true;
+	$rootScope.data = {};
+	$rootScope.data.img_ratio = '';
+	if(window.devicePixelRatio > 1){
+		$rootScope.data.img_ratio = '_2x';
+	}
+	$rootScope.data.domain = document.domain;
+	if($rootScope.data.domain == ''){
+		$rootScope.document_root = '/www/';
+		$rootScope.data.domain = 'ja.osaka.ramen.autham.net';
+	}
+	$rootScope.data.language = $rootScope.data.domain.split('.')[0];
+	$rootScope.data.area = $rootScope.data.domain.split('.')[1];
+	$rootScope.data.siteGenre = $rootScope.data.domain.split('.')[2];
+	$rootScope.data.requestUrl = $location.$$path;
+	var requestUrl = $rootScope.data.requestUrl;
+	if($rootScope.data.requestUrl.substr(-1) != '/'){
+		var requestUrl = $rootScope.data.requestUrl + '/';
+	}
+	$rootScope.query = window.location.search.substring(1);
+	if($rootScope.query != ''){
+		$rootScope.queryString = '?' + $rootScope.query;
+	}else{
+		$rootScope.queryString = '';
+	}
+	var requestTo = 'http://api.' + $rootScope.data.siteGenre + '.autham.net' + requestUrl + $rootScope.data.language + '/' + $rootScope.data.area + $rootScope.queryString;
+	$http.jsonp(requestTo, {params: {callback: 'JSON_CALLBACK'}})
+	.success(function(data, status, headers, config){
+		$rootScope.data.remote = data;
+		$rootScope.data.remote = $.parseJSON($interpolate(JSON.stringify(data))($rootScope));
+		$rootScope.loader = false;
+	})
+	.error(function(data, status, headers, config){
+		$rootScope.loader = false;
+	});
+}]);
+Autham.controller('IndexCtrl', ['$scope', '$http', '$rootScope', '$controller', function($scope, $http, $rootScope, $controller){
+	$controller('FrontBaseCtrl', { $scope: $scope });
+}]);
+Autham.controller('StationsCtrl', ['$scope', '$http', '$rootScope', '$controller', function($scope, $http, $rootScope, $controller){
+	$controller('FrontBaseCtrl', { $scope: $scope });
+	console.log($rootScope.data);
+	// load Stations
+	$rootScope.$watch('data.remote.station_line_groups', function(){
+		if(typeof $rootScope.data.remote != 'undefined'){
+			for(i in $rootScope.data.remote.station_line_groups){
+				var thisLineGroupId = $rootScope.data.remote.station_line_groups[i].id;
+				for(j in $rootScope.data.remote.station_lines[thisLineGroupId]){
+					$scope.commonService.reloadStations($rootScope.data.remote.station_lines[thisLineGroupId][j].id, true);
+				}
 			}
-		}
-		// show first accordion
-		$rootScope.showFirstAccordion = function(target){
-			$rootScope[target] = {};
-			$rootScope[target][0] = 'in';
-		}
-		// show all accordion
-		$rootScope.showAllAccordion = function(listData, target){
-			$rootScope[target] = {};
-			for(i in listData){
-				$rootScope[target][i] = 'in';
-			}
-		}
-		// prevent automatic sort
-		$rootScope.notSorted = function(obj){
-			if (!obj) {
-				return [];
-			}
-			return Object.keys(obj);
-		}
-		// get review average
-		$rootScope.getReviewAverage = function(obj){
-			var sums = 0;
-			for(i in obj){
-				sums = sums + parseInt(obj[i].rate);
-			}
-			var average = {};
-			average.raw = sums / obj.length;
-			average.floor = Math.floor(average.raw);
-			return average;
-		}
-		// convert string to json
-		$rootScope.stringToJson = function(jsonString){
-			return $.parseJSON(jsonString);
 		}
 	});
-});
-
-// custom filters
-var customFilters = angular.module('customFilters', []);
-// remove slash filter
-customFilters.filter('removeSymbols', function(){
-	return function(input){
-		if(typeof input == 'undefined'){
-			return '';
-		}
-		var removed = input.replace(/[\!\"\#\$\%\&\'\(\)\=\-\~\^\|\`\@\[\]\{\}\*\:\;\?\.\,<>_\/]+/g, '');
-		console.log(removed);
-		return removed;
-	};
-});
-// encodeURIComponent filter
-customFilters.filter('encodeURIComponent', function(){
-	return function(input){
-		if(typeof input == 'undefined'){
-			return '';
-		}
-		var encoded = encodeURIComponent(encodeURIComponent(input));
-		return encoded;
-	};
-});
-
-Autham.controller('IndexCtrl', ['$scope', '$http', '$rootScope', function($scope,$http,$rootScope){
-}]);
-Autham.controller('StationsCtrl', ['$scope', '$http', '$rootScope', function($scope,$http,$rootScope){
 	// create station url
 	$scope.createStationUrl = function(station_code, state, station_id){
 		if(typeof $scope.selected_stations == 'undefined'){
@@ -189,7 +122,9 @@ Autham.controller('StationsCtrl', ['$scope', '$http', '$rootScope', function($sc
 		return thisState;
 	}
 }]);
-Autham.controller('AreasCtrl', ['$scope', '$http', '$rootScope', function($scope,$http,$rootScope){
+Autham.controller('AreasCtrl', ['$scope', '$http', '$rootScope', '$controller', function($scope, $http, $rootScope, $controller){
+	$controller('FrontBaseCtrl', { $scope: $scope });
+	console.log($rootScope.data);
 	// create area url
 	$scope.createAreaUrl = function(area_code, state){
 		if(typeof $scope.selected_areas == 'undefined'){
@@ -213,8 +148,31 @@ Autham.controller('AreasCtrl', ['$scope', '$http', '$rootScope', function($scope
 		return thisState;
 	}
 }]);
-Autham.controller('FreewordsCtrl', ['$scope', '$http', '$rootScope', function($scope,$http,$rootScope){
+Autham.controller('FreewordsCtrl', ['$scope', '$http', '$rootScope', '$controller', function($scope, $http, $rootScope, $controller){
+	$controller('FrontBaseCtrl', { $scope: $scope });
 }]);
-Autham.controller('ListsCtrl', ['$scope', '$http', '$rootScope', function($scope,$http,$rootScope){
-	console.log($rootScope.data);
+Autham.controller('ListsCtrl', ['$scope', '$http', '$rootScope', '$controller', '$timeout', function($scope, $http, $rootScope, $controller, $timeout){
+	$controller('FrontBaseCtrl', { $scope: $scope });
+}]);
+Autham.controller('DetailCtrl', ['$scope', '$http', '$rootScope', '$controller', function($scope, $http, $rootScope, $controller){
+	$controller('FrontBaseCtrl', { $scope: $scope });
+	console.log($scope.data);
+}]);
+Autham.controller('SearchCtrl', ['$scope', '$http', '$rootScope', '$controller', function($scope, $http, $rootScope, $controller){
+	$controller('FrontBaseCtrl', { $scope: $scope });
+	/*
+	$scope.$on('$viewContentLoaded', function(event) {
+		console.log($scope.data);
+	});
+	*/
+	console.log($scope.data);
+}]);
+Autham.controller('TermsCtrl', ['$scope', '$http', '$rootScope', '$controller', function($scope, $http, $rootScope, $controller){
+	$controller('FrontBaseCtrl', { $scope: $scope });
+}]);
+Autham.controller('PrivacyCtrl', ['$scope', '$http', '$rootScope', '$controller', function($scope, $http, $rootScope, $controller){
+	$controller('FrontBaseCtrl', { $scope: $scope });
+}]);
+Autham.controller('ActCtrl', ['$scope', '$http', '$rootScope', '$controller', function($scope, $http, $rootScope, $controller){
+	$controller('FrontBaseCtrl', { $scope: $scope });
 }]);

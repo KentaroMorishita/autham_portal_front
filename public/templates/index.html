@@ -1,7 +1,7 @@
 <div class="row magazine-page">
 	<div class="col-md-9">
-		<div ng-repeat="key in notSorted(data.remote.search_ways)" ng-init="search_way = data.remote.search_ways[key]" ng-if="search_way.code != 'detail'">
-			<div class="headline" ng-if="search_way.code == 'photo' || search_way.code == 'freeword'">
+		<div ng-repeat="key in commonService.notSorted(data.remote.search_ways)" ng-init="search_way = data.remote.search_ways[key]" ng-if="search_way.code != 'detail'">
+			<div class="headline" ng-if="search_way.code == 'photo'">
 				<h2>{{search_way[data.language]}}</h2>
 			</div>
 			<div ng-if="search_way.code == 'photo'">
@@ -17,14 +17,14 @@
 							<div ng-repeat="photo_sub_category in data.remote.photo_sub_categories[photo_category.id]" ng-show="$parent.$parent.subtabindex == $index">
 								<div class="row">
 									<div ng-if="data.remote.photos[photo_category.id][$parent.$parent.subtabindex].length > 0">
-										<div class="col-md-3 col-xs-6" ng-repeat-start="photo in data.remote.photos[photo_category.id][$parent.$parent.$parent.subtabindex]">
+										<div class="col-md-3 col-sm-3" ng-repeat-start="photo in data.remote.photos[photo_category.id][$parent.$parent.$parent.subtabindex]">
 											<div class="magazine-news-img margin-bottom-5">
-												<a href="#"><img alt="" src="/uploads/{{photo.path}}" class="img-responsive"></a>
+												<a href="#"><img alt="" src="http://img.ramen.autham.net/uploads/{{photo.path}}" class="img-responsive"></a>
 												<span class="magazine-badge label-dark">{{photo["title_" + data.language]}}</span>									  
 											</div>
 										</div>
-										<div class="clearfix visible-md visible-lg" ng-if="$index%4==3"></div>
-										<div class="clearfix visible-xs visible-sm" ng-if="$index%2==1"></div>
+										<div class="clearfix visible-md visible-lg visible-sm" ng-if="$index%4==3"></div>
+										<div class="clearfix visible-xs" ng-if="$index%2==1"></div>
 										<div ng-repeat-end=""></div>
 									</div>
 									<div ng-if="data.remote.photos[photo_category.id][$parent.$parent.subtabindex].length == 0" class="col-lg-12">
@@ -38,17 +38,11 @@
 					</div>
 				</div>
 			</div>
-			<div ng-if="search_way.code == 'freeword'">
-				<div class="input-group">
-					<input type="text" class="form-control" ng-model="freeword">
-					<span class="input-group-btn">
-						<a class="btn btn-inverse" href="/freewords/{{freeword}}"><i class="fa fa-search"></i> {{data.remote.texts.search}}</a>
-					</span>
-				</div>
-			</div>
 
 		</div>
 	</div>
 	<div class="col-md-3">
+		<ng-include src="'/partials/pr.html'"></ng-include>
+		<ng-include src="'/partials/information.html'"></ng-include>
 	</div>
 </div>

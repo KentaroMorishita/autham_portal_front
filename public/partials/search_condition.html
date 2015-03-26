@@ -1,0 +1,101 @@
+<div class="sky-form search-condition" ng-init="data.search = data.remote.searchs">
+	<div class="clearfix">
+		<div class="inline-group" ng-init="data.search.search_by = data.remote.detail_search_by">
+			<label class="radio"><input type="radio" ng-model="data.search.search_by" value="station"><i class="rounded-x"></i>{{data.remote.texts.station}}</label>
+			<label class="radio"><input type="radio" ng-model="data.search.search_by" value="area"><i class="rounded-x"></i>{{data.remote.texts.area}}</label>
+		</div>
+	</div>
+	<div ng-show="data.search.search_by == 'station'" ng-init="line_selected = ''" class="row">
+		<div ng-class="{'col-lg-6 col-md-6': !data.remote.result_lists, 'col-lg-12 col-md-12': data.remote.result_lists}">
+			<label class="label">{{data.remote.texts.station_line}}</label>
+			<label class="select">
+				<select ng-model="data.search.line" ng-options="station_line.id as station_line[data.language] for station_line in data.remote.station_lines" ng-change="commonService.reloadStations(data.search.line);"></select>
+				<i></i>
+			</label>
+		</div>
+		<div ng-class="{'col-lg-6 col-md-6': !data.remote.result_lists, 'col-lg-12 col-md-12': data.remote.result_lists}">
+			<label class="label">{{data.remote.texts.station}}</label>
+			<label class="select" ng-init="data.search.station = data.remote.stations[0].code">
+				<select ng-model="data.search.station" ng-options="station.code as station[data.language] for station in data.remote.stations">
+					<option ng-if="!data.remote.stations" value="">{{data.remote.texts.choose_line}}</option>
+				</select>
+				<i></i>
+			</label>
+		</div>
+	</div>
+	<div ng-show="data.search.search_by == 'area'" ng-init="area_group_selected = ''" class="row">
+		<div ng-class="{'col-lg-6 col-md-6': !data.remote.result_lists, 'col-lg-12 col-md-12': data.remote.result_lists}">
+			<label class="label">{{data.remote.texts.area_group}}</label>
+			<label class="select">
+				<select ng-model="data.search.area_group" ng-options="area_group.id as area_group[data.language] for area_group in data.remote.area_groups" ng-change="commonService.reloadAreas(data.search.area_group);"></select>
+				<i></i>
+			</label>
+		</div>
+		<div ng-class="{'col-lg-6 col-md-6': !data.remote.result_lists, 'col-lg-12 col-md-12': data.remote.result_lists}">
+			<label class="label">{{data.remote.texts.area}}</label>
+			<label class="select" ng-init="data.search.area = data.remote.areas[0].code">
+				<select ng-model="data.search.area" ng-options="area.code as area[data.language] for area in data.remote.areas">
+					<option ng-if="!data.remote.areas" value="">{{data.remote.texts.choose_area_group}}</option>
+				</select>
+				<i></i>
+			</label>
+		</div>
+	</div>
+	<div class="row">
+		<div ng-if="data.remote.settings.customer_category != data.remote.display_way" ng-class="{'col-lg-6 col-md-6': !data.remote.result_lists, 'col-lg-12 col-md-12': data.remote.result_lists}">
+			<label class="label">{{data.remote.texts.sub_category}}</label>
+			<label class="select">
+				<select ng-model="data.search.sub_category" ng-options="sub_category.code as sub_category[data.language] for sub_category in data.remote.sub_categories"></select>
+				<i></i>
+			</label>
+		</div>
+		<div ng-if="data.remote.item_informations[data.remote.display_way]" ng-class="{'col-lg-6 col-md-6': !data.remote.result_lists, 'col-lg-12 col-md-12': data.remote.result_lists}">
+			<label class="label">{{data.remote.texts.special_conditions}}</label>
+			<div id="accordion-1" class="panel-group margin-bottom-5">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title" ng-click="commonService.accordToggle('acoclass', 0);">
+							<a href="" class="">
+								...
+							</a>
+						</h4>
+					</div>
+					<div class="panel-collapse collapse" ng-class="acoclass[0]">
+						<div class="panel-body">
+							<div ng-repeat="item_information in data.remote.item_informations[data.remote.display_way]" search-condition-directive>
+								<label class="label clearfix" ng-if="item_information.settings.search_type != 'none'">
+									<span class="pull-left">
+									{{item_information[data.language]}}
+									</span>
+									<!-- Boolean -->
+									<span class="pull-right" ng-if="item_information.settings.search_type == 'boolean'">
+										<label class="checkbox" ng-init="data.search.details[item_information.code] = commonService.judgeBoolean(data.remote.searchs.details[item_information.code]);">
+											<input type="checkbox" ng-model="data.search.details[item_information.code]">
+											<i></i>
+										</label>
+									</span>
+								</label>
+								<!-- Range -->
+								<label class="form_slider_ranges label" ng-if="item_information.settings.search_type == 'range'">
+									<input class="form_slider_values" type="text" ng-model="data.search.details[item_information.code].min" readonly="true" size="{{item_information.settings.range_max.length}}" ng-init="data.search.details[item_information.code].min = data.remote.searchs.details[item_information.code].min ? data.remote.searchs.details[item_information.code].min : item_information.settings.range_min;">
+									<span ng-if="item_information.settings.type == 'currency'">{{data.remote.currency[data.language]}}</span>
+									- 
+									<input class="form_slider_values" type="text" ng-model="data.search.details[item_information.code].max" readonly="true" size="{{item_information.settings.range_max.length}}" ng-init="data.search.details[item_information.code].max = data.remote.searchs.details[item_information.code].max ? data.remote.searchs.details[item_information.code].max : item_information.settings.range_max;">
+									<span ng-if="item_information.settings.type == 'currency'">{{data.remote.currency[data.language]}}</span>
+								</label>
+								<div class="form_sliders" ng-if="item_information.settings.search_type == 'range'" code="{{item_information.code}}" range-max="{{item_information.settings.range_max}}" range-min="{{item_information.settings.range_min}}" range-per="{{item_information.settings.range_per}}"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<label class="label">{{data.remote.texts.freeword}}</label>
+	<label class="input">
+		<input type="text" ng-model="data.search.freeword">
+	</label>
+	<input ng-init="data.search.display_way = data.remote.display_way" type="hidden" ng-model="data.search.display_way">
+	<hr class="devider devider-db margin-bottom-10 margin-top-10">
+	<a class="btn-u btn-block" ng-href="/search?{{data.search | jsonToQueryString}}"><i class="fa fa-search"></i> {{data.remote.texts.selected_condition_search}}</a>
+</div>

@@ -1,5 +1,5 @@
 <div class="row magazine-page">
-	<div class="col-md-9" ng-init="showFirstAccordion('acoclass');">
+	<div class="col-md-9" ng-init="commonService.showFirstAccordion('acoclass');">
 		<div ng-repeat="search_way in data.remote.search_ways" ng-if="search_way.code == 'area'">
 			<div class="headline">
 				<h2>{{search_way[data.language]}}</h2>
@@ -7,9 +7,9 @@
 			<div ng-if="search_way.code == 'area'">
 
 				<div id="accordion-1" class="panel-group margin-bottom-5 sky-form">
-					<div class="panel panel-default" ng-repeat="areaGroup in data.remote.area_groups">
+					<div class="panel panel-dark" ng-repeat="areaGroup in data.remote.area_groups">
 						<div class="panel-heading">
-							<h4 class="panel-title" ng-click="accordToggle('acoclass', $index);">
+							<h4 class="panel-title" ng-click="commonService.accordToggle('acoclass', $index);">
 								<a href="" class="">
 									{{areaGroup[data.language]}}
 								</a>
@@ -45,5 +45,7 @@
 		</div>
 	</div>
 	<div class="col-md-3">
+		<ng-include src="'/partials/pr.html'"></ng-include>
+		<ng-include src="'/partials/information.html'"></ng-include>
 	</div>
 </div>

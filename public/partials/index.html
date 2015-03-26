@@ -10,7 +10,7 @@
 				</div>
 			</div>
 		</div>
-		<div ng-repeat="key in notSorted(data.remote.search_ways)" ng-init="search_way = data.remote.search_ways[key]" ng-if="search_way.code != 'detail'">
+		<div ng-repeat="key in commonService.notSorted(data.remote.search_ways)" ng-init="search_way = data.remote.search_ways[key]" ng-if="search_way.code != 'detail'">
 			<div class="headline" ng-if="search_way.code == 'photo' || search_way.code == 'freeword'">
 				<h2>{{search_way[data.language]}}</h2>
 			</div>

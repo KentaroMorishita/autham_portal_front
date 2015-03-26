@@ -31,10 +31,11 @@
 	<link rel="stylesheet" href="/assets/plugins/font-awesome/css/font-awesome.css">
 	
 	<!-- CSS Theme -->
+	<link rel="stylesheet" href="/assets/css/pages/blog_magazine.css">
+	<link rel="stylesheet" href="/assets/css/pages/page_job.css">
 	<link rel="stylesheet" href="/assets/css/theme-colors/{{data.remote.settings.theme_color}}.css">
 	
 	<!-- Custom CSS -->
-	<link rel="stylesheet" href="/assets/css/pages/blog_magazine.css">
 	<link rel="stylesheet" href="/assets/plugins/sky-forms/version-2.0.1/css/sky-forms.css">
 	<link rel="stylesheet" href="/assets/plugins/sky-forms/version-2.0.1/css/custom-sky-forms.css">
 	<link rel="stylesheet" href="/assets/css/custom.css">
@@ -53,7 +54,7 @@
 					<i class="fa fa-globe"></i>
 					<a>Languages</a>
 					<ul class="languages">
-						<li ng-repeat="language in data.remote.languages" ng-class="{active: data.language == language.code}"><a href="http://{{language.code}}.{{data.area}}.{{data.siteGenre}}.autham.net{{data.requestUrl}}">{{language.name}} <i class="fa fa-check" ng-show="data.language == language.code"></i></a></li>
+						<li ng-repeat="language in data.remote.languages" ng-class="{active: data.language == language.code}"><a href="http://{{language.code}}.{{data.area}}.{{data.siteGenre}}.autham.net{{data.requestUrl}}{{queryString}}">{{language.name}} <i class="fa fa-check" ng-show="data.language == language.code"></i></a></li>
 					</ul>
 				</li>
 			</ul>
@@ -86,7 +87,7 @@
 
 			<div class="collapse navbar-collapse navbar-responsive-collapse">
 				<ul class="nav navbar-nav">
-					<li ng-repeat="key in notSorted(data.remote.search_ways)" ng-init="search_way = data.remote.search_ways[key]">
+					<li ng-repeat="key in commonService.notSorted(data.remote.search_ways)" ng-init="search_way = data.remote.search_ways[key]" ng-class="{active: search_way.code == data.remote.controller}">
 						<a class="" ng-href="/{{search_way.code}}s" ng-if="search_way.code != 'photo'">
 							<i class="fa {{search_way.icon_class}}"></i>
 							{{search_way[data.language]}}
@@ -112,15 +113,42 @@
 			<li><a href="/">{{data.remote.texts.home}}</a></li>
 			<li ng-if="data.remote.controller == 'station' && data.remote.action == 'result'"><a href="/stations">{{data.remote.search_ways.station[data.language]}}</a></li>
 			<li ng-if="data.remote.controller == 'area' && data.remote.action == 'result'"><a href="/areas">{{data.remote.search_ways.area[data.language]}}</a></li>
-			<li class="active" ng-if="data.requestUrl == '/stations/'">{{data.remote.search_ways.station[data.language]}}</li>
-			<li class="active" ng-if="data.requestUrl == '/areas/'">{{data.remote.search_ways.area[data.language]}}</li>
-			<li class="active" ng-if="data.requestUrl == '/freewords/'">{{data.remote.search_ways.freeword[data.language]}}</li>
+			<li ng-if="data.remote.controller == 'search' && data.remote.action == 'index'"><a href="/details">{{data.remote.search_ways.detail[data.language]}}</a></li>
+			<li class="active" ng-if="data.remote.controller == 'station' && data.remote.action == 'index'">{{data.remote.search_ways.station[data.language]}}</li>
+			<li class="active" ng-if="data.remote.controller == 'area' && data.remote.action == 'index'">{{data.remote.search_ways.area[data.language]}}</li>
+			<li class="active" ng-if="data.remote.controller == 'freeword' && data.remote.action == 'index'">{{data.remote.search_ways.freeword[data.language]}}</li>
 			<li class="active" ng-if="data.remote.controller == 'station' && data.remote.action == 'result'">{{data.remote.page_title}}</li>
 			<li class="active" ng-if="data.remote.controller == 'area' && data.remote.action == 'result'">{{data.remote.page_title}}</li>
+			<li class="active" ng-if="data.remote.controller == 'detail' && data.remote.action == 'index'">{{data.remote.page_title}}</li>
+			<li class="active" ng-if="data.remote.controller == 'search' && data.remote.action == 'index'">{{data.remote.page_title}}</li>
 		</ul>
 	</div><!--/container-->
 </div>
 <!--=== End Breadcrumb ===-->
+
+<div class="job-img margin-bottom-10" ng-if="data.remote.controller == 'index' && data.remote.action == 'index'">
+        <div class="job-banner">
+            <h2>{{data.remote.settings.top_catch_copy[data.language]}}</h2>
+        </div>   
+        <div class="job-img-inputs">
+            <div class="container">
+                <div class="row">
+					<div class="col-sm-2"></div>                        
+                    <div class="col-sm-4 md-margin-bottom-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                            <input ng-model="freeword" type="text" placeholder="{{data.remote.texts.search_input_placeholder}}" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+						<a class="btn-u btn-block btn-u-dark" href="/search/?freeword={{freeword}}"> {{data.remote.texts.search}}</a>
+                    </div>
+					<div class="col-sm-2"></div>                        
+                </div>
+            </div>    
+        </div>    
+    </div>
+</div>
 
 <!--=== Content Part  ===-->
 <div class="container content">
@@ -156,7 +184,7 @@
 					<div class="posts">
 						<div class="headline"><h2>{{data.remote.texts.search}}</h2></div>
 						<ul class="list-unstyled link-list">
-							<li ng-repeat="key in notSorted(data.remote.search_ways)" ng-init="search_way = data.remote.search_ways[key]">
+							<li ng-repeat="key in commonService.notSorted(data.remote.search_ways)" ng-init="search_way = data.remote.search_ways[key]">
 								<a href="/{{search_way.code}}s" ng-if="search_way.code != 'photo'">
 									{{search_way[data.language]}}
 								</a>
@@ -188,8 +216,8 @@
 			<div class="row">
 				<div class="col-md-7">					   
 					<p>
-						2014 © {{data.remote.area[data.language]}} {{data.remote.siteGenre[data.language]}} Autham All Rights Reserved.
-					   <a href="#">{{data.remote.texts.privacy_policy}}</a> | <a href="#">{{data.remote.texts.terms_of_service}}</a>
+						2014 © {{data.remote.area[data.language]}} {{data.remote.siteGenre[data.language]}} {{data.remote.settings.platform.en}} All Rights Reserved.
+					   <a href="/privacy">{{data.remote.texts.privacy_policy}}</a> | <a href="/terms">{{data.remote.texts.terms_of_service}}</a> | <a href="/act">{{data.remote.texts.act}}</a>
 					</p>
 				</div>
 
@@ -221,6 +249,8 @@
 
 <!-- JS Global Compulsory -->
 <script src="/assets/plugins/jquery/jquery.min.js"></script>
+<script src="/assets/plugins/sky-forms/version-2.0.1/js/jquery-ui.min.js"></script>
+<script src="/assets/plugins/jquery/jquery.ui.touch-punch.min.js"></script>
 <script src="/assets/plugins/jquery/jquery-migrate.min.js"></script>
 <script src="/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
 
@@ -249,5 +279,8 @@ jQuery(document).ready(function() {
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-route.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-resource.js"></script>
 <script src="/scripts/app.js"></script>
+<script src="/scripts/route.js"></script>
+<script src="/scripts/filter.js"></script>
+<script src="/scripts/services.js"></script>
 </body>
 </html>

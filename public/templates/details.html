@@ -1,0 +1,19 @@
+<div class="row magazine-page">
+	<div class="col-md-9">
+		<div class="headline">
+			<h2>{{data.remote.search_ways.detail[data.language]}}</h2>
+		</div>
+		<div class="tab-v2" ng-init="tabindex = 0;">
+			<ul class="nav nav-tabs">
+				<li ng-repeat="list_display_way in data.remote.settings.list_display_ways" ng-class="{active: data.remote.display_way == list_display_way}"><a ng-href="{{data.requestUrl}}?display_way={{list_display_way}}">{{data.remote.categories[list_display_way][data.language]}}</a></li>
+			</ul>
+			<div class="tab-content" ng-repeat="list_display_way in data.remote.settings.list_display_ways" ng-show="data.remote.display_way == list_display_way">
+				<ng-include src="'/partials/search_condition.html'"></ng-include>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<ng-include src="'/partials/pr.html'"></ng-include>
+		<ng-include src="'/partials/information.html'"></ng-include>
+	</div>
+</div>

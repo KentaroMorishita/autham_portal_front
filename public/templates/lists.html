@@ -6,7 +6,23 @@
 		<div>
 			<div class="tab-v2" ng-init="tabindex = 0;">
 				<ul class="nav nav-tabs">
-					<li ng-repeat="list_display_way in data.remote.settings.list_display_ways" ng-class="{active: data.remote.display_way == list_display_way}"><a ng-href="{{data.requestUrl}}?display_way={{list_display_way}}">{{data.remote.categories[list_display_way][data.language]}}</a></li>
+					<li ng-repeat="list_display_way in data.remote.settings.list_display_ways" ng-class="{active: data.remote.display_way == list_display_way}">
+						<a ng-if="data.remote.controller != 'search'" ng-href="{{data.requestUrl}}?display_way={{list_display_way}}">
+							{{data.remote.categories[list_display_way][data.language]}}
+						</a>
+						<a ng-if="data.remote.controller == 'search' && !data.remote.searchs.station && !data.remote.searchs.area && !data.remote.searchs.freeword" ng-href="/details?display_way={{list_display_way}}">
+							{{data.remote.categories[list_display_way][data.language]}}
+						</a>
+						<a ng-if="data.remote.controller == 'search' && data.remote.searchs.station && data.remote.searchs.station != ''" ng-href="/search?display_way={{list_display_way}}&search_by=station&line={{data.remote.searchs.line}}&station={{data.remote.searchs.station}}&freeword={{data.remote.searchs.freeword}}">
+							{{data.remote.categories[list_display_way][data.language]}}
+						</a>
+						<a ng-if="data.remote.controller == 'search' && data.remote.searchs.area && data.remote.searchs.area != ''" ng-href="/search?display_way={{list_display_way}}&search_by=area&area_group={{data.remote.searchs.area_group}}&area={{data.remote.searchs.area}}&freeword={{data.remote.searchs.freeword}}">
+							{{data.remote.categories[list_display_way][data.language]}}
+						</a>
+						<a ng-if="data.remote.controller == 'search' && !data.remote.searchs.station && !data.remote.searchs.area && data.remote.searchs.freeword && data.remote.searchs.freeword != ''" ng-href="/search?display_way={{list_display_way}}&freeword={{data.remote.searchs.freeword}}">
+							{{data.remote.categories[list_display_way][data.language]}}
+						</a>
+					</li>
 				</ul>
 				<div class="tab-content" ng-repeat="list_display_way in data.remote.settings.list_display_ways" ng-show="data.remote.display_way == list_display_way">
 					<div class="row">
@@ -26,7 +42,7 @@
 											</button>
 											<ul role="menu" class="dropdown-menu">
 												<li ng-repeat="order in data.remote.categories[list_display_way].settings.order_lists.lists" ng-class="{'active': data.remote.order.code == order}">
-													<a href="{{data.requestUrl}}?display_way={{data.remote.display_way}}&page=1&per-page={{data.remote.per_list}}&order={{order}}">{{data.remote.orders[order][data.language]}}</a>
+													<a href="{{data.requestUrl}}?{{query | makeListBaseParams}}&display_way={{data.remote.display_way}}&page=1&per-page={{data.remote.per_list}}&order={{order}}">{{data.remote.orders[order][data.language]}}</a>
 												</li>
 											</ul>
 										</div>
@@ -37,7 +53,7 @@
 											</button>
 											<ul role="menu" class="dropdown-menu">
 												<li ng-repeat="per_list in data.remote.settings.max_display_list.list" ng-class="{'active': data.remote.per_page == per_list}">
-													<a href="{{data.requestUrl}}?display_way={{data.remote.display_way}}&page=1&per-page={{per_list}}&order={{data.remote.order.code}}">{{per_list}}</a>
+													<a href="{{data.requestUrl}}?{{query | makeListBaseParams}}&display_way={{data.remote.display_way}}&page=1&per-page={{per_list}}&order={{data.remote.order.code}}">{{per_list}}</a>
 												</li>
 											</ul>
 										</div>
@@ -45,15 +61,15 @@
 								</div>
 							</div>
 							<ul class="pagination" ng-if="data.remote.result_lists.last_page > 1">
-								<li ng-repeat="i in data.remote.result_lists.range track by $index" ng-class="{'active': data.remote.result_lists.current_page == i, 'dot': i == '...'}"><a ng-href="{{data.requestUrl}}?display_way={{list_display_way}}&page={{i}}&per-page={{data.remote.per_page}}&order={{data.remote.order.code}}">{{i}}</a></li>
+								<li ng-repeat="i in data.remote.result_lists.range track by $index" ng-class="{'active': data.remote.result_lists.current_page == i, 'dot': i == '...'}"><a ng-href="{{data.requestUrl}}?{{query | makeListBaseParams}}&display_way={{list_display_way}}&page={{i}}&per-page={{data.remote.per_page}}&order={{data.remote.order.code}}">{{i}}</a></li>
 							</ul>
 							<div ng-repeat="result in data.remote.result_lists.data">
 								<div class="row">
-									<div class="funny-boxes-img col-md-4" ng-init="photos = result.photos.split(',')">
+									<div class="funny-boxes-img col-md-4" ng-init="photos = result.photos.split(',');">
 										<div id="carousel-{{$parent.list_display_way}}-{{$index}}" class="carousel slide carousel-v1" ng-if="photos.length > 1 && result.validity_flag == 1">
 											<div class="carousel-inner">
-												<div class="item" ng-repeat="photo in photos" ng-class="{'active': $first}">
-													<img class="img-responsive" src="/uploads/{{photo}}">
+												<div class="item" ng-repeat="photo in photos track by $index" ng-class="{'active': $first}">
+													<img class="img-responsive" src="http://img.ramen.autham.net/uploads/{{photo}}">
 												</div>
 											</div>
 											<div class="carousel-arrow">
@@ -66,10 +82,10 @@
 											</div>
 										</div>
 										<div ng-if="photos.length == 1 && result.validity_flag == 1">
-											<img class="img-responsive" src="/uploads/{{result.photos}}">
+											<img class="img-responsive" src="http://img.ramen.autham.net/uploads/{{result.photos}}">
 										</div>
 										<div ng-if="result.photos == NULL || result.validity_flag == 0">
-											<img class="img-responsive" src="http://time.levtech.jp/wp-content/themes/lev_tech-time9/img/NoImage.jpg">
+											<img class="img-responsive" src="/assets/img/no-image.gif">
 										</div>
 									</div>
 									<div class="col-md-8">
@@ -79,7 +95,7 @@
 										</p>
 										<div class="small" ng-repeat="review_item in data.remote.categories[$parent.list_display_way].settings.review_items" ng-if="result.reviews[review_item].length > 0 && result.validity_flag == 1">
 											{{data.remote.review_items[$parent.$parent.list_display_way][review_item][data.language]}}:
-											<span ng-init="thisAverage = getReviewAverage(result.reviews[review_item]);">{{thisAverage.raw}}</span>
+											<span ng-init="thisAverage = commonService.getReviewAverage(result.reviews[review_item]);">{{thisAverage.raw}}</span>
 											<i class="fa fa-star text-light" ng-repeat="i in [1,2,3,4,5]" ng-class="{'text-yellow': i <= thisAverage.raw}"></i>
 										</div>
 										<p>{{result.content}}</p>
@@ -119,10 +135,16 @@
 							</div>
 							<pre>{{data.remote.result_lists|json}}</pre>
 							<ul class="pagination" ng-if="data.remote.result_lists.last_page > 1">
-								<li ng-repeat="i in data.remote.result_lists.range track by $index" ng-class="{'active': data.remote.result_lists.current_page == i, 'dot': i == '...'}"><a ng-href="{{data.requestUrl}}?display_way={{list_display_way}}&page={{i}}&per-page={{data.remote.per_page}}&order={{data.remote.order.code}}">{{i}}</a></li>
+								<li ng-repeat="i in data.remote.result_lists.range track by $index" ng-class="{'active': data.remote.result_lists.current_page == i, 'dot': i == '...'}"><a ng-href="{{data.requestUrl}}?{{query | makeListBaseParams}}&display_way={{list_display_way}}&page={{i}}&per-page={{data.remote.per_page}}&order={{data.remote.order.code}}">{{i}}</a></li>
 							</ul>
 						</div>
 						<div class="col-md-3">
+							<div class="headline">
+								<h2>{{data.remote.search_ways.detail[data.language]}}</h2>
+							</div>
+							<ng-include src="'/partials/search_condition.html'"></ng-include>
+							<ng-include src="'/partials/pr.html'"></ng-include>
+							<ng-include src="'/partials/information.html'"></ng-include>
 						</div>
 					</div>
 				</div>

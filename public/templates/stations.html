@@ -5,11 +5,15 @@
 				<h2>{{search_way[data.language]}}</h2>
 			</div>
 			<div ng-if="search_way.code == 'station'">
+				<div>
+					<label></label>
+					<input ng-model="stationWord" ng-keyup="commonService.searchStationByWord(stationWord);">
+				</div>
 
-				<div id="accordion-1" class="panel-group margin-bottom-5 sky-form" ng-init="showAllAccordion(data.remote.station_line_groups, 'acoclass');">
-					<div class="panel panel-dark" ng-repeat="stationLineGroup in data.remote.station_line_groups">
+				<div id="accordion-1" class="panel-group margin-bottom-5 sky-form" ng-init="commonService.showAllAccordion(data.remote.station_line_groups, 'acoclass');">
+					<div class="panel panel-dark" ng-repeat="stationLineGroup in data.remote.station_line_groups" ng-hide="data.stationLineGroupsHide[stationLineGroup.id]">
 						<div class="panel-heading">
-							<h4 class="panel-title" ng-click="accordToggle('acoclass', $index);">
+							<h4 class="panel-title" ng-click="commonService.accordToggle('acoclass', $index);">
 								<a href="" class="">
 									{{stationLineGroup[data.language]}}
 								</a>
@@ -21,9 +25,9 @@
 									<div class="col-md-12">
 
 										<div id="accordion-2" class="panel-group">
-											<div class="panel panel-default" ng-repeat="stationLine in data.remote.station_lines[stationLineGroup.id]">
+											<div class="panel panel-default" ng-repeat="stationLine in data.remote.station_lines[stationLineGroup.id]" ng-hide="data.stationLineHide[stationLine.id]">
 												<div class="panel-heading">
-													<h4 class="panel-title" ng-click="accordToggle('acosubclass', $parent.$index + '-' + $index);">
+													<h4 class="panel-title" ng-click="commonService.accordToggle('acosubclass', $parent.$index + '-' + $index);">
 														<a href="" class="">
 															{{stationLine[data.language]}}
 														</a>
@@ -31,9 +35,14 @@
 												</div>
 												<div class="panel-collapse collapse" ng-class="$parent.$parent.$parent.$parent.acosubclass[$parent.$index + '-' + $index]">
 													<div class="panel-body">
+														<div class="loader" ng-show="loaderStation[stationLine.id]">
+															<div class="loader-box">
+																<i class="fa fa-circle-o-notch fa-spin"></i><p>Now loading...</p>
+															</div>
+														</div>
 
 														<div class="row">
-															<div ng-repeat-start="station in data.remote.stations[stationLine.id]" class="col-md-3">
+															<div ng-repeat-start="station in data.stations[stationLine.id]" class="col-md-3" ng-hide="data.stationHide[station.id]">
 																<div class="input-group margin-bottom-5">
 																	<span class="input-group-addon">
 																		<label class="checkbox">
@@ -66,5 +75,7 @@
 		</div>
 	</div>
 	<div class="col-md-3">
+		<ng-include src="'/partials/pr.html'"></ng-include>
+		<ng-include src="'/partials/information.html'"></ng-include>
 	</div>
 </div>

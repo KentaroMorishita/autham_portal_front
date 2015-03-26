@@ -19,8 +19,12 @@ body {
 }
 
 .loader {
+	/*
 	background: none repeat scroll 0 0 rgba(0, 0, 0, 0.95);
 	color: white;
+	*/
+	background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9);
+	color: #AAA;
 	height: 100%;
 	position: absolute;
 	text-align: center;
@@ -44,7 +48,10 @@ body {
 }
  
 .loader p{
+	/*
 	color: #FFF;
+	*/
+	color: #AAA;
 }
 
 .footer-logo {
@@ -76,7 +83,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .headline h2 {
-	font-size: 18px;
+	font-size: 15px;
 }
 
 .magazine-page span.magazine-badge {
@@ -177,4 +184,46 @@ fieldset[disabled] .btn-inverse.active {
 #accordion-1.sky-form .checkbox {
 	min-height: 17px;
 	padding-left: 17px;
+}
+
+.pre-line {
+	white-space: pre-line;
+}
+
+.magazine-mini-news h3, .magazine-mini-news h3 a {
+	font-size: 14px;
+}
+
+.sky-form.search-condition {
+	border: none;
+}
+
+.sky-form .label {
+	margin-bottom: 0;
+}
+
+.sky-form .ui-slider-handle {
+	height: 25px;
+	width: 25px;
+	margin: -13px 0 0 -13px;
+}
+
+.form_slider_values {
+	border: none;
+}
+
+.job-img {
+	background: url(../img/top.jpg) 70% 40% no-repeat;
+}
+
+.panel-body {
+	position: relative;
+}
+
+.panel-body .input-group .form-control {
+	word-break: break-all;
+}
+
+.job-img .job-banner h2 {
+	white-space: pre-line;
 }

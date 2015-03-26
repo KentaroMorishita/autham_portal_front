@@ -1,0 +1,16 @@
+<div class="headline">
+	<h2>{{data.remote.texts.whats_new}}</h2>
+</div>
+<div class="margin-bottom-20">
+	<div ng-repeat="info in data.remote.informations">
+		<div class="magazine-mini-news">
+			<img ng-if="info.file != null" src="/assets/img/informations/{{info.file}}" class="img-responsive">
+			<h3><a>{{info.title}}</a></h3>
+			<div class="post-author">
+				<strong>{{info.date}}</strong> 
+			</div>
+			<p class="pre-line">{{info.content}}</p>
+		</div>
+		<hr class="hr-md">
+	</div>
+</div>
