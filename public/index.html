@@ -11,7 +11,7 @@
 	<meta content="{{data.remote.keywords}}" name="keywords">
 	<meta content="{{data.remote.description}}" name="description">
 	<meta content="Autham Japan" name="author">
-	<meta content="© Autham Japan" name="copyright">
+	<meta content="© AUTHAM JAPAN" name="copyright">
 	<meta content="{{data.remote.keywords}}" name="classification">
 
 	<!-- For Google -->
@@ -107,22 +107,15 @@
 <!--=== End Header v1===-->
 
 <!--=== Breadcrumb ===-->
-<div class="breadcrumbs" ng-if="data.requestUrl != '/'">
+<div class="breadcrumbs" ng-if="data.remote.breadcrumbs.length > 0">
 	<div class="container">
 		<ul class="pull-left breadcrumb">
-			<li><a href="/">{{data.remote.texts.home}}</a></li>
-			<li ng-if="data.remote.controller == 'station' && data.remote.action == 'result'"><a href="/stations">{{data.remote.search_ways.station[data.language]}}</a></li>
-			<li ng-if="data.remote.controller == 'area' && data.remote.action == 'result'"><a href="/areas">{{data.remote.search_ways.area[data.language]}}</a></li>
-			<li ng-if="data.remote.controller == 'search' && data.remote.action == 'index'"><a href="/details">{{data.remote.search_ways.detail[data.language]}}</a></li>
-			<li class="active" ng-if="data.remote.controller == 'station' && data.remote.action == 'index'">{{data.remote.search_ways.station[data.language]}}</li>
-			<li class="active" ng-if="data.remote.controller == 'area' && data.remote.action == 'index'">{{data.remote.search_ways.area[data.language]}}</li>
-			<li class="active" ng-if="data.remote.controller == 'freeword' && data.remote.action == 'index'">{{data.remote.search_ways.freeword[data.language]}}</li>
-			<li class="active" ng-if="data.remote.controller == 'station' && data.remote.action == 'result'">{{data.remote.page_title}}</li>
-			<li class="active" ng-if="data.remote.controller == 'area' && data.remote.action == 'result'">{{data.remote.page_title}}</li>
-			<li class="active" ng-if="data.remote.controller == 'detail' && data.remote.action == 'index'">{{data.remote.page_title}}</li>
-			<li class="active" ng-if="data.remote.controller == 'search' && data.remote.action == 'index'">{{data.remote.page_title}}</li>
+			<li ng-repeat="breadcrumb in data.remote.breadcrumbs" ng-class="{'active': $last}">
+				<a ng-if="!$last" href="{{breadcrumb.url}}">{{breadcrumb.text}}</a>
+				<span ng-if="$last">{{breadcrumb.text}}</span>
+			</li>
 		</ul>
-	</div><!--/container-->
+	</div>
 </div>
 <!--=== End Breadcrumb ===-->
 
@@ -217,7 +210,7 @@
 				<div class="col-md-7">					   
 					<p>
 						2014 © {{data.remote.area[data.language]}} {{data.remote.siteGenre[data.language]}} {{data.remote.settings.platform.en}} All Rights Reserved.
-					   <a href="/privacy">{{data.remote.texts.privacy_policy}}</a> | <a href="/terms">{{data.remote.texts.terms_of_service}}</a> | <a href="/act">{{data.remote.texts.act}}</a>
+					   <a href="/privacy">{{data.remote.texts.privacy_policy}}</a> | <a href="/terms">{{data.remote.texts.terms_of_service}}</a> | <a href="/act" ng-if="data.remote.country.code == 'jp'">{{data.remote.texts.act}}</a>
 					</p>
 				</div>
 

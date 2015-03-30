@@ -1,9 +1,5 @@
 angular.module('services', []).factory("commonService", function($rootScope, $http){
 	return {
-		// do something
-		doSomething: function(){
-			console.log('do something!');
-		},
 		// judge boolean from string
 		judgeBoolean: function(booleanString){
 			if(typeof booleanString == undefined){
@@ -81,9 +77,11 @@ angular.module('services', []).factory("commonService", function($rootScope, $ht
 		},
 		// show all accordion
 		showAllAccordion: function(listData, target){
-			$rootScope[target] = {};
+			if(typeof $rootScope.data[target] == 'undefined'){
+				$rootScope.data[target] = {};
+			}
 			for(i in listData){
-				$rootScope[target][i] = 'in';
+				$rootScope.data[target][listData[i].id] = 'in';
 			}
 		},
 		// show first accordion
@@ -93,17 +91,17 @@ angular.module('services', []).factory("commonService", function($rootScope, $ht
 		},
 		// open and close accord
 		accordToggle: function(target, index){
-			if(typeof $rootScope[target] == 'undefined'){
-				$rootScope[target] = {};
+			if(typeof $rootScope.data[target] == 'undefined'){
+				$rootScope.data[target] = {};
 			}
-			if(typeof $rootScope[target][index] != 'undefined'){
-				if($rootScope[target][index] == 'in'){
-					$rootScope[target][index] = '';
+			if(typeof $rootScope.data[target][index] != 'undefined'){
+				if($rootScope.data[target][index] == 'in'){
+					$rootScope.data[target][index] = '';
 				}else{
-					$rootScope[target][index] = 'in';
+					$rootScope.data[target][index] = 'in';
 				}
 			}else{
-				$rootScope[target][index] = 'in';
+				$rootScope.data[target][index] = 'in';
 			}
 		},
 		// switch sub tab
@@ -111,17 +109,20 @@ angular.module('services', []).factory("commonService", function($rootScope, $ht
 			$rootScope.subtabindex = obj.$index;
 		},
 		// search station by word
-		searchStationByWord: function(word){
+		searchStationByWord: function(word, event){
+			if(event.keyCode == 13){
+				event.target.blur();
+			}
 			if(typeof $rootScope.data.remote != 'undefined'){
 				for(i in $rootScope.data.remote.station_line_groups){
 					var thisLineGroupId = $rootScope.data.remote.station_line_groups[i].id;
+					$rootScope.commonService.showAllAccordion($rootScope.data.remote.station_lines[thisLineGroupId], 'acosubclass');
 					if(typeof $rootScope.data.stationLineGroupsHide == 'undefined'){
 						$rootScope.data.stationLineGroupsHide = {};
 					}
 					$rootScope.data.stationLineGroupsHide[thisLineGroupId] = true;
 					for(j in $rootScope.data.remote.station_lines[thisLineGroupId]){
 						var thisLineId = $rootScope.data.remote.station_lines[thisLineGroupId][j].id;
-						$rootScope.commonService.showAllAccordion($rootScope.data.remote.station_lines[thisLineId, 'acosubclass']);
 						if(typeof $rootScope.data.stationLineHide == 'undefined'){
 							$rootScope.data.stationLineHide = {};
 						}
@@ -142,6 +143,26 @@ angular.module('services', []).factory("commonService", function($rootScope, $ht
 					}
 				}
 			}
-		}
+		},
+		// format date
+		dateFormat: function(rawString){
+			if(typeof rawString == 'undefined'){
+				return false;
+			}	
+			var monthNames = new Array("January", "February", "March", 
+					"April", "May", "June", "July", "August", "September", 
+					"October", "November", "December");
+			var rawString = rawString.replace(/-/g, '/');
+			var newDate = new Date(rawString);
+			var year = newDate.getFullYear();
+			var month = newDate.getMonth();
+			var date = newDate.getDate();
+			if($rootScope.data.language == 'ja'){
+				return year + '年' + month + '月' + date + '日';
+			}else{
+				return monthNames[month] + ' ' + date + ', ' + year;
+			}	
+		}	
+
 	}
 });

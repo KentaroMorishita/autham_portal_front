@@ -5,12 +5,13 @@
 				<h2>{{search_way[data.language]}}</h2>
 			</div>
 			<div ng-if="search_way.code == 'station'">
-				<div>
-					<label></label>
-					<input ng-model="stationWord" ng-keyup="commonService.searchStationByWord(stationWord);">
-				</div>
-
 				<div id="accordion-1" class="panel-group margin-bottom-5 sky-form" ng-init="commonService.showAllAccordion(data.remote.station_line_groups, 'acoclass');">
+					<div>
+						<label class="label">{{data.remote.texts.narrow_down_stations_by_word}}</label>
+						<label class="input">
+							<input ng-model="stationWord" ng-keyup="commonService.searchStationByWord(stationWord, $event);">
+						</label>
+					</div>
 					<div class="panel panel-dark" ng-repeat="stationLineGroup in data.remote.station_line_groups" ng-hide="data.stationLineGroupsHide[stationLineGroup.id]">
 						<div class="panel-heading">
 							<h4 class="panel-title" ng-click="commonService.accordToggle('acoclass', $index);">
@@ -19,7 +20,7 @@
 								</a>
 							</h4>
 						</div>
-						<div class="panel-collapse collapse" ng-class="$parent.$parent.$parent.acoclass[$index]">
+						<div class="panel-collapse collapse" ng-class="data.acoclass[stationLineGroup.id]">
 							<div class="panel-body">
 								<div class="row">
 									<div class="col-md-12">
@@ -27,13 +28,13 @@
 										<div id="accordion-2" class="panel-group">
 											<div class="panel panel-default" ng-repeat="stationLine in data.remote.station_lines[stationLineGroup.id]" ng-hide="data.stationLineHide[stationLine.id]">
 												<div class="panel-heading">
-													<h4 class="panel-title" ng-click="commonService.accordToggle('acosubclass', $parent.$index + '-' + $index);">
+													<h4 class="panel-title" ng-click="commonService.accordToggle('acosubclass', stationLine.id);">
 														<a href="" class="">
 															{{stationLine[data.language]}}
 														</a>
 													</h4>
 												</div>
-												<div class="panel-collapse collapse" ng-class="$parent.$parent.$parent.$parent.acosubclass[$parent.$index + '-' + $index]">
+												<div class="panel-collapse collapse" ng-class="data.acosubclass[stationLine.id]">
 													<div class="panel-body">
 														<div class="loader" ng-show="loaderStation[stationLine.id]">
 															<div class="loader-box">
@@ -70,7 +71,7 @@
 					</div>
 
 				</div>	
-				<a ng-show="$parent.$parent.station_url" class="btn-u btn-u-lg btn-block btn-selected-search" href="/stations/{{$parent.$parent.station_url}}"><i class="fa fa-search"></i> {{data.remote.texts.selected_station_search}}</a>
+				<a ng-show="data.station_url" class="btn-u btn-u-lg btn-block btn-selected-search" href="/stations/{{data.station_url}}"><i class="fa fa-search"></i> {{data.remote.texts.selected_station_search}}</a>
 			</div>
 		</div>
 	</div>

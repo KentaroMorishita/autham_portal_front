@@ -125,6 +125,13 @@ Autham.controller('StationsCtrl', ['$scope', '$http', '$rootScope', '$controller
 Autham.controller('AreasCtrl', ['$scope', '$http', '$rootScope', '$controller', function($scope, $http, $rootScope, $controller){
 	$controller('FrontBaseCtrl', { $scope: $scope });
 	console.log($rootScope.data);
+	$rootScope.$watch('data.remote.area_groups', function(){
+		console.log(1);
+		if(typeof $rootScope.data.remote != 'undefined'){
+			console.log(2);
+			$scope.commonService.showAllAccordion($rootScope.data.remote.area_groups, 'acoclass');
+		}
+	});
 	// create area url
 	$scope.createAreaUrl = function(area_code, state){
 		if(typeof $scope.selected_areas == 'undefined'){

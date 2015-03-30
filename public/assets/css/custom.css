@@ -177,6 +177,11 @@ fieldset[disabled] .btn-inverse.active {
 	min-width: inherit;
 }
 
+#accordion-1.sky-form {
+	border: none;
+	box-shadow: none;
+}
+
 #accordion-1.sky-form .checkbox i {
 	top: 0px;
 }

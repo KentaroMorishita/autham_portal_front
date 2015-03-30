@@ -1,5 +1,5 @@
 <div class="row magazine-page">
-	<div class="col-md-9" ng-init="commonService.showFirstAccordion('acoclass');">
+	<div class="col-md-9">
 		<div ng-repeat="search_way in data.remote.search_ways" ng-if="search_way.code == 'area'">
 			<div class="headline">
 				<h2>{{search_way[data.language]}}</h2>
@@ -7,15 +7,15 @@
 			<div ng-if="search_way.code == 'area'">
 
 				<div id="accordion-1" class="panel-group margin-bottom-5 sky-form">
-					<div class="panel panel-dark" ng-repeat="areaGroup in data.remote.area_groups">
+					<div class="panel panel-dark" ng-repeat="areaGroup in data.remote.area_groups" ng-init="">
 						<div class="panel-heading">
-							<h4 class="panel-title" ng-click="commonService.accordToggle('acoclass', $index);">
+							<h4 class="panel-title" ng-click="commonService.accordToggle('acoclass', areaGroup.id);">
 								<a href="" class="">
 									{{areaGroup[data.language]}}
 								</a>
 							</h4>
 						</div>
-						<div class="panel-collapse collapse" ng-class="$parent.$parent.$parent.acoclass[$index]">
+						<div class="panel-collapse collapse" ng-class="data.acoclass[areaGroup.id]">
 							<div class="panel-body">
 
 								<div class="row">
@@ -39,7 +39,7 @@
 						</div>
 					</div>
 				</div>
-				<a ng-show="$parent.area_url" class="btn-u btn-u-lg btn-block btn-selected-search" href="/areas/{{$parent.area_url}}"><i class="fa fa-search"></i> {{data.remote.texts.selected_area_search}}</a>
+				<a ng-show="data.area_url" class="btn-u btn-u-lg btn-block btn-selected-search" href="/areas/{{data.area_url}}"><i class="fa fa-search"></i> {{data.remote.texts.selected_area_search}}</a>
 
 			</div>
 		</div>
