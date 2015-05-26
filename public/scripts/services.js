@@ -22,7 +22,7 @@ angular.module('services', []).factory("commonService", function($rootScope, $ht
 				}
 				$rootScope.loaderStation[lineId] = true;
 			}
-			var requestTo = 'http://api.' + $rootScope.data.siteGenre + '.autham.net/stations/lists/' + $rootScope.data.language + '/' + $rootScope.data.area + $rootScope.queryString;
+			var requestTo = 'http://api.' + $rootScope.data.siteGenre + '.autham.net/station/lists/' + $rootScope.data.language + '/' + $rootScope.data.area + $rootScope.queryString;
 			$http.jsonp(requestTo, {params: {callback: 'JSON_CALLBACK', 'line-id': lineId}})
 			.success(function(data, status, headers, config){
 				if(typeof stationSearchFlag == 'undefined'){
@@ -44,7 +44,7 @@ angular.module('services', []).factory("commonService", function($rootScope, $ht
 			if(typeof areaGroupId == 'undefined'){
 				return false;
 			}
-			var requestTo = 'http://api.' + $rootScope.data.siteGenre + '.autham.net/areas/lists/' + $rootScope.data.language + '/' + $rootScope.data.area + $rootScope.queryString;
+			var requestTo = 'http://api.' + $rootScope.data.siteGenre + '.autham.net/area/lists/' + $rootScope.data.language + '/' + $rootScope.data.area + $rootScope.queryString;
 			$http.jsonp(requestTo, {params: {callback: 'JSON_CALLBACK', 'area-group-id': areaGroupId}})
 			.success(function(data, status, headers, config){
 				$rootScope.data.remote.areas = data;

@@ -4,31 +4,39 @@ Autham.config(['$routeProvider', function($routeProvider){
 			templateUrl: '/templates/index.html',
 			controller: 'IndexCtrl'
 		})
-		.when('/stations', {
+		.when('/station', {
 			templateUrl: '/templates/stations.html',
 			controller: 'StationsCtrl'
 		})
-		.when('/stations/:stations', {
+		.when('/station/:stations', {
 			templateUrl: '/templates/lists.html',
 			controller: 'ListsCtrl'
 		})
-		.when('/areas', {
+		.when('/area', {
 			templateUrl: '/templates/areas.html',
 			controller: 'AreasCtrl'
 		})
-		.when('/areas/:areas', {
+		.when('/area/:areas', {
 			templateUrl: '/templates/lists.html',
 			controller: 'ListsCtrl'
 		})
-		.when('/freewords', {
+		.when('/category', {
+			templateUrl: '/templates/categories.html',
+			controller: 'CategoriesCtrl'
+		})
+		.when('/category/:categories', {
+			templateUrl: '/templates/lists.html',
+			controller: 'ListsCtrl'
+		})
+		.when('/freeword', {
 			templateUrl: '/templates/freewords.html',
 			controller: 'FreewordsCtrl'
 		})
-		.when('/freewords/:freewords', {
+		.when('/freeword/:freewords', {
 			templateUrl: '/templates/lists.html',
 			controller: 'ListsCtrl'
 		})
-		.when('/details', {
+		.when('/detail', {
 			templateUrl: '/templates/details.html',
 			controller: 'DetailCtrl'
 		})

@@ -7,17 +7,17 @@
 			<div ng-if="search_way.code == 'photo'">
 				<div class="tab-v2" ng-init="tabindex = 0;subtabindex = 0">
 					<ul class="nav nav-tabs">
-						<li ng-repeat="photo_category in data.remote.photo_categories" ng-class="{active: $parent.tabindex == $index}"><a data-toggle="tab" href="" ng-click="$parent.tabindex = $index; $parent.subtabindex = 0;">{{photo_category[data.language]}}</a></li>
+						<li ng-repeat="category in data.remote.categories" ng-class="{active: $parent.tabindex == $index}"><a data-toggle="tab" href="" ng-click="$parent.tabindex = $index; $parent.subtabindex = 0;">{{category[data.language]}}</a></li>
 					</ul>
 					<div class="tab-content">
-						<div ng-repeat="photo_category in data.remote.photo_categories" ng-class="{active: $parent.tabindex == $index}" class="tab-pane fade in" ng-init="subtabindex = 0">
+						<div ng-repeat="category in data.remote.categories" ng-class="{active: $parent.tabindex == $index}" class="tab-pane fade in" ng-init="subtabindex = 0">
 							<div>
-								<a class="btn btn-default btn-u-xs margin-right-5 margin-bottom-5" ng-repeat="photo_sub_category in data.remote.photo_sub_categories[photo_category.id]" ng-class="{'btn-u': $index == $parent.$parent.subtabindex}" ng-click="$parent.$parent.subtabindex = $index">{{photo_sub_category[data.language]}}</a>
+								<a class="btn btn-default btn-u-xs margin-right-5 margin-bottom-5" ng-repeat="key in commonService.notSorted(data.remote.sub_categories[category.code])" ng-init="sub_category = data.remote.sub_categories[category.code][key]" ng-class="{'btn-u': $index == $parent.$parent.subtabindex}" ng-click="$parent.$parent.subtabindex = $index">{{sub_category[data.language]}}</a>
 							</div>
-							<div ng-repeat="photo_sub_category in data.remote.photo_sub_categories[photo_category.id]" ng-show="$parent.$parent.subtabindex == $index">
+							<div ng-repeat="sub_category in data.remote.sub_categories[category.code]" ng-show="$parent.$parent.subtabindex == $index">
 								<div class="row">
-									<div ng-if="data.remote.photos[photo_category.id][$parent.$parent.subtabindex].length > 0">
-										<div class="col-md-3 col-sm-3" ng-repeat-start="photo in data.remote.photos[photo_category.id][$parent.$parent.$parent.subtabindex]">
+									<div ng-if="data.remote.photos[category.id][$parent.$parent.subtabindex].length > 0">
+										<div class="col-md-3 col-sm-3" ng-repeat-start="photo in data.remote.photos[category.id][$parent.$parent.$parent.subtabindex]">
 											<div class="magazine-news-img margin-bottom-5">
 												<a href="#"><img alt="" src="http://img.ramen.autham.net/uploads/{{photo.path}}" class="img-responsive"></a>
 												<span class="magazine-badge label-dark">{{photo["title_" + data.language]}}</span>									  
@@ -27,7 +27,7 @@
 										<div class="clearfix visible-xs" ng-if="$index%2==1"></div>
 										<div ng-repeat-end=""></div>
 									</div>
-									<div ng-if="data.remote.photos[photo_category.id][$parent.$parent.subtabindex].length == 0" class="col-lg-12">
+									<div ng-if="data.remote.photos[category.id][$parent.$parent.subtabindex].length == 0" class="col-lg-12">
 										<div class="tag-box tag-box-v4">
 											<p>{{data.remote.texts.not_found}}</p>
 										</div>

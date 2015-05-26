@@ -75,6 +75,7 @@ Autham.controller('FrontBaseCtrl', ['$scope', '$http', '$rootScope', '$routePara
 	.success(function(data, status, headers, config){
 		$rootScope.data.remote = data;
 		$rootScope.data.remote = $.parseJSON($interpolate(JSON.stringify(data))($rootScope));
+		$rootScope.data.remote = $.parseJSON($interpolate(JSON.stringify(data))($rootScope));
 		$rootScope.loader = false;
 	})
 	.error(function(data, status, headers, config){
@@ -83,6 +84,7 @@ Autham.controller('FrontBaseCtrl', ['$scope', '$http', '$rootScope', '$routePara
 }]);
 Autham.controller('IndexCtrl', ['$scope', '$http', '$rootScope', '$controller', function($scope, $http, $rootScope, $controller){
 	$controller('FrontBaseCtrl', { $scope: $scope });
+	console.log($rootScope.data);
 }]);
 Autham.controller('StationsCtrl', ['$scope', '$http', '$rootScope', '$controller', function($scope, $http, $rootScope, $controller){
 	$controller('FrontBaseCtrl', { $scope: $scope });
@@ -155,11 +157,16 @@ Autham.controller('AreasCtrl', ['$scope', '$http', '$rootScope', '$controller', 
 		return thisState;
 	}
 }]);
+Autham.controller('CategoriesCtrl', ['$scope', '$http', '$rootScope', '$controller', function($scope, $http, $rootScope, $controller){
+	$controller('FrontBaseCtrl', { $scope: $scope });
+	console.log($rootScope.data);
+}]);
 Autham.controller('FreewordsCtrl', ['$scope', '$http', '$rootScope', '$controller', function($scope, $http, $rootScope, $controller){
 	$controller('FrontBaseCtrl', { $scope: $scope });
 }]);
 Autham.controller('ListsCtrl', ['$scope', '$http', '$rootScope', '$controller', '$timeout', function($scope, $http, $rootScope, $controller, $timeout){
 	$controller('FrontBaseCtrl', { $scope: $scope });
+	console.log($rootScope.data);
 }]);
 Autham.controller('DetailCtrl', ['$scope', '$http', '$rootScope', '$controller', function($scope, $http, $rootScope, $controller){
 	$controller('FrontBaseCtrl', { $scope: $scope });
@@ -176,10 +183,12 @@ Autham.controller('SearchCtrl', ['$scope', '$http', '$rootScope', '$controller',
 }]);
 Autham.controller('TermsCtrl', ['$scope', '$http', '$rootScope', '$controller', function($scope, $http, $rootScope, $controller){
 	$controller('FrontBaseCtrl', { $scope: $scope });
+	console.log($rootScope.data);
 }]);
 Autham.controller('PrivacyCtrl', ['$scope', '$http', '$rootScope', '$controller', function($scope, $http, $rootScope, $controller){
 	$controller('FrontBaseCtrl', { $scope: $scope });
 }]);
 Autham.controller('ActCtrl', ['$scope', '$http', '$rootScope', '$controller', function($scope, $http, $rootScope, $controller){
 	$controller('FrontBaseCtrl', { $scope: $scope });
+	console.log($rootScope.data);
 }]);

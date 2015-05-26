@@ -1,0 +1,26 @@
+<div class="row magazine-page">
+	<div class="col-md-9">
+		<div class="headline">
+			<h2>{{data.remote.page_title}}</h2>
+		</div>
+		<div class="tab-v2" ng-init="tabindex = 0;">
+			<ul class="nav nav-tabs">
+				<li ng-repeat="category_search in data.remote.settings.category_search_list" ng-class="{active: data.remote.display_way == category_search}"><a ng-href="{{data.requestUrl}}?display_way={{category_search}}">{{data.remote.categories[category_search][data.language]}}</a></li>
+			</ul>
+			<div class="tab-content" ng-repeat="category_search in data.remote.settings.category_search_list" ng-show="data.remote.display_way == category_search">
+				<div class="row">
+					<div ng-repeat-start="key in commonService.notSorted(data.remote.sub_categories)" ng-init="sub_category = data.remote.sub_categories[key]" class="col-md-3">
+						<a class="form-control margin-bottom-5" href="/category/{{sub_category.code}}?display_way={{category_search}}">{{sub_category[data.language]}}</a>
+					</div>
+					<div class="clearfix visible-md visible-lg" ng-if="$index%4==3"></div>
+					<div class="clearfix visible-xs visible-sm" ng-if="$index%2==1"></div>
+					<div ng-repeat-end=""></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<ng-include src="'/partials/pr.html'"></ng-include>
+		<ng-include src="'/partials/information.html'"></ng-include>
+	</div>
+</div>

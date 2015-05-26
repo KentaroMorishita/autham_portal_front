@@ -45,7 +45,7 @@
 		<div ng-if="data.remote.settings.customer_category != data.remote.display_way" ng-class="{'col-lg-6 col-md-6': !data.remote.result_lists, 'col-lg-12 col-md-12': data.remote.result_lists}">
 			<label class="label">{{data.remote.texts.sub_category}}</label>
 			<label class="select">
-				<select ng-model="data.search.sub_category" ng-options="sub_category.code as sub_category[data.language] for sub_category in data.remote.sub_categories"></select>
+				<select ng-model="data.search.sub_category" ng-options="data.remote.sub_categories[key].code as data.remote.sub_categories[key][data.language] for key in commonService.notSorted(data.remote.sub_categories)"></select>
 				<i></i>
 			</label>
 		</div>
@@ -77,13 +77,13 @@
 								</label>
 								<!-- Range -->
 								<label class="form_slider_ranges label" ng-if="item_information.settings.search_type == 'range'">
-									<input class="form_slider_values" type="text" ng-model="data.search.details[item_information.code].min" readonly="true" size="{{item_information.settings.range_max.length}}" ng-init="data.search.details[item_information.code].min = data.remote.searchs.details[item_information.code].min ? data.remote.searchs.details[item_information.code].min : item_information.settings.range_min;">
-									<span ng-if="item_information.settings.type == 'currency'">{{data.remote.currency[data.language]}}</span>
+									<input class="form_slider_values" type="text" ng-model="data.search.details[item_information.code].min" readonly="true" size="{{item_information.settings.range_max[data.remote.country.code].length}}" ng-init="data.search.details[item_information.code].min = data.remote.searchs.details[item_information.code].min ? data.remote.searchs.details[item_information.code].min : item_information.settings.range_min[data.remote.country.code];">
+									<span ng-if="item_information.settings.type == 'currency'">{{data.remote.currency[data.language + '_plural']}}</span>
 									- 
-									<input class="form_slider_values" type="text" ng-model="data.search.details[item_information.code].max" readonly="true" size="{{item_information.settings.range_max.length}}" ng-init="data.search.details[item_information.code].max = data.remote.searchs.details[item_information.code].max ? data.remote.searchs.details[item_information.code].max : item_information.settings.range_max;">
-									<span ng-if="item_information.settings.type == 'currency'">{{data.remote.currency[data.language]}}</span>
+									<input class="form_slider_values" type="text" ng-model="data.search.details[item_information.code].max" readonly="true" size="{{item_information.settings.range_max[data.remote.country.code].length}}" ng-init="data.search.details[item_information.code].max = data.remote.searchs.details[item_information.code].max ? data.remote.searchs.details[item_information.code].max : item_information.settings.range_max[data.remote.country.code];">
+									<span ng-if="item_information.settings.type == 'currency'">{{data.remote.currency[data.language + '_plural']}}</span>
 								</label>
-								<div class="form_sliders" ng-if="item_information.settings.search_type == 'range'" code="{{item_information.code}}" range-max="{{item_information.settings.range_max}}" range-min="{{item_information.settings.range_min}}" range-per="{{item_information.settings.range_per}}"></div>
+								<div class="form_sliders" ng-if="item_information.settings.search_type == 'range'" code="{{item_information.code}}" range-max="{{item_information.settings.range_max[data.remote.country.code]}}" range-min="{{item_information.settings.range_min[data.remote.country.code]}}" range-per="{{item_information.settings.range_per[data.remote.country.code]}}"></div>
 							</div>
 						</div>
 					</div>

@@ -10,8 +10,8 @@
 	<meta content="width=device-width, initial-scale=1.0" name="viewport">
 	<meta content="{{data.remote.keywords}}" name="keywords">
 	<meta content="{{data.remote.description}}" name="description">
-	<meta content="Autham Japan" name="author">
-	<meta content="© AUTHAM JAPAN" name="copyright">
+	<meta content="{{data.remote.settings.our_name[data.language]}}" name="author">
+	<meta content="© {{data.remote.settings.our_name[data.language]}}" name="copyright">
 	<meta content="{{data.remote.keywords}}" name="classification">
 
 	<!-- For Google -->
@@ -87,16 +87,26 @@
 
 			<div class="collapse navbar-collapse navbar-responsive-collapse">
 				<ul class="nav navbar-nav">
-					<li ng-repeat="key in commonService.notSorted(data.remote.search_ways)" ng-init="search_way = data.remote.search_ways[key]" ng-class="{active: search_way.code == data.remote.controller}">
-						<a class="" ng-href="/{{search_way.code}}s" ng-if="search_way.code != 'photo'">
+					<span ng-repeat-start="key in commonService.notSorted(data.remote.search_ways)" ng-init="search_way = data.remote.search_ways[key]"></span>
+					<li ng-class="{active: search_way.code == data.remote.controller}" ng-if="search_way.code != 'photo' && search_way.code != 'category'">
+						<a class="" ng-href="/{{search_way.code}}">
 							<i class="fa {{search_way.icon_class}}"></i>
 							{{search_way[data.language]}}
 						</a>
-						<a class="" ng-href="/" ng-if="search_way.code == 'photo'">
+					</li>				
+					<li ng-class="{active: search_way.code == data.remote.controller}" ng-if="search_way.code == 'photo'">
+						<a class="" ng-href="/">
 							<i class="fa {{search_way.icon_class}}"></i>
 							{{search_way[data.language]}}
 						</a>
-					</li>					 
+					</li>				
+					<li ng-class="{active: search_way.code == data.remote.controller}" ng-if="search_way.code == 'category'" ng-repeat="category_code in data.remote.settings.category_search_list">
+						<a class="" ng-href="/category?display_way={{category_code}}">
+							<i class="fa {{data.remote.categories[category_code].settings.icon_class}}"></i>
+							{{data.remote.categories[category_code].settings.title[data.language]}}
+						</a>
+					</li>				
+					<span ng-repeat-end=""></span>
 				</ul>
 			</div>
 
@@ -177,14 +187,26 @@
 					<div class="posts">
 						<div class="headline"><h2>{{data.remote.texts.search}}</h2></div>
 						<ul class="list-unstyled link-list">
-							<li ng-repeat="key in commonService.notSorted(data.remote.search_ways)" ng-init="search_way = data.remote.search_ways[key]">
-								<a href="/{{search_way.code}}s" ng-if="search_way.code != 'photo'">
+							<span ng-repeat-start="key in commonService.notSorted(data.remote.search_ways)" ng-init="search_way = data.remote.search_ways[key]"></span>
+							<li ng-class="{active: search_way.code == data.remote.controller}" ng-if="search_way.code != 'photo' && search_way.code != 'category'">
+								<a class="" ng-href="/{{search_way.code}}">
 									{{search_way[data.language]}}
 								</a>
-								<a href="/" ng-if="search_way.code == 'photo'">
+								<i class="fa fa-angle-right"></i>
+							</li>				
+							<li ng-class="{active: search_way.code == data.remote.controller}" ng-if="search_way.code == 'photo'">
+								<a class="" ng-href="/">
 									{{search_way[data.language]}}
 								</a>
-								<i class="fa fa-angle-right"></i></li>
+								<i class="fa fa-angle-right"></i>
+							</li>				
+							<li ng-class="{active: search_way.code == data.remote.controller}" ng-if="search_way.code == 'category'" ng-repeat="category_code in data.remote.settings.category_search_list">
+								<a class="" ng-href="/category?display_way={{category_code}}">
+									{{data.remote.categories[category_code].settings.title[data.language]}}
+								</a>
+								<i class="fa fa-angle-right"></i>
+							</li>				
+							<span ng-repeat-end=""></span>
 						</ul>
 					</div>
 				</div><!--/col-md-3-->	
@@ -209,7 +231,7 @@
 			<div class="row">
 				<div class="col-md-7">					   
 					<p>
-						2014 © {{data.remote.area[data.language]}} {{data.remote.siteGenre[data.language]}} {{data.remote.settings.platform.en}} All Rights Reserved.
+						2014 © {{data.remote.settings.our_name[data.language]}} All Rights Reserved.
 					   <a href="/privacy">{{data.remote.texts.privacy_policy}}</a> | <a href="/terms">{{data.remote.texts.terms_of_service}}</a> | <a href="/act" ng-if="data.remote.country.code == 'jp'">{{data.remote.texts.act}}</a>
 					</p>
 				</div>

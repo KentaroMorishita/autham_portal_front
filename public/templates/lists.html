@@ -10,7 +10,7 @@
 						<a ng-if="data.remote.controller != 'search'" ng-href="{{data.requestUrl}}?display_way={{list_display_way}}">
 							{{data.remote.categories[list_display_way][data.language]}}
 						</a>
-						<a ng-if="data.remote.controller == 'search' && !data.remote.searchs.station && !data.remote.searchs.area && !data.remote.searchs.freeword" ng-href="/details?display_way={{list_display_way}}">
+						<a ng-if="data.remote.controller == 'search' && !data.remote.searchs.station && !data.remote.searchs.area && !data.remote.searchs.freeword" ng-href="/detail?display_way={{list_display_way}}">
 							{{data.remote.categories[list_display_way][data.language]}}
 						</a>
 						<a ng-if="data.remote.controller == 'search' && data.remote.searchs.station && data.remote.searchs.station != ''" ng-href="/search?display_way={{list_display_way}}&search_by=station&line={{data.remote.searchs.line}}&station={{data.remote.searchs.station}}&freeword={{data.remote.searchs.freeword}}">
